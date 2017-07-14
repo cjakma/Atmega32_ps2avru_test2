@@ -21,6 +21,8 @@ $RECYCLE.BIN/
 *.elf
 # Windows shortcuts
 *.lnk
+*.srec
+*.lss
 
 # =========================
 # Operating System Files
