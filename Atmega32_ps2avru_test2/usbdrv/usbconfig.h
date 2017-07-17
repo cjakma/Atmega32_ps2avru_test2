@@ -1,17 +1,5 @@
-/* Name: usbconfig.h
- * Project: V-USB, virtual USB port for Atmel's(r) AVR(r) microcontrollers
- * Author: Christian Starkjohann
- * Creation Date: 2005-04-01
- * Tabsize: 4
- * Copyright: (c) 2005 by OBJECTIVE DEVELOPMENT Software GmbH
- * License: GNU GPL v2 (see License.txt), GNU GPL v3 or proprietary (CommercialLicense.txt)
- */
-
 #ifndef __usbconfig_h_included__
 #define __usbconfig_h_included__
-
-#include "hardwareconfig.h"
-#include "hardwareinfo.h"
 
 /*
 General Description:
@@ -28,15 +16,15 @@ section at the end of this file).
 
 /* ---------------------------- Hardware Config ---------------------------- */
 
-#define USB_CFG_IOPORTNAME      P2U_USB_CFG_IOPORTNAME
+#define USB_CFG_IOPORTNAME      D
 /* This is the port where the USB bus is connected. When you configure it to
  * "B", the registers PORTB, PINB and DDRB will be used.
  */
-#define USB_CFG_DMINUS_BIT      P2U_USB_CFG_DMINUS_BIT
+#define USB_CFG_DMINUS_BIT      3
 /* This is the bit number in USB_CFG_IOPORT where the USB D- line is connected.
  * This may be any bit in the port.
  */
-#define USB_CFG_DPLUS_BIT       P2U_USB_CFG_DPLUS_BIT
+#define USB_CFG_DPLUS_BIT       2
 /* This is the bit number in USB_CFG_IOPORT where the USB D+ line is connected.
  * This may be any bit in the port. Please note that D+ must also be connected
  * to interrupt pin INT0! [You can also use other interrupts, see section
@@ -224,27 +212,8 @@ section at the end of this file).
 #define PRODUCT_ID      0x3512
 #define DEVICE_VER      0x0001
 #define  USB_CFG_VENDOR_ID       0xCC, 0xCC /* Vendor ID 8352 (= 0x20A0 hex) */
-/* USB vendor ID for the device, low byte first. If you have registered your
- * own Vendor ID, define it here. Otherwise you may use one of obdev's free
- * shared VID/PID pairs. Be sure to read USB-IDs-for-free.txt for rules!
- * *** IMPORTANT NOTE ***
- * This template uses obdev's shared VID/PID pair for Vendor Class devices
- * with libusb: 0x16c0/0x5dc.  Use this VID/PID pair ONLY if you understand
- * the implications!
- */
-
 #define  USB_CFG_DEVICE_ID       0x12, 0x35 /* USB-HOBBY PID: 16941 (= 0x422d hex) */
-/* This is the ID of the product, low byte first. It is interpreted in the
- * scope of the vendor ID. If you have registered your own VID with usb.org
- * or if you have licensed a PID from somebody else, define it here. Otherwise
- * you may use one of obdev's free shared VID/PID pairs. See the file
- * USB-IDs-for-free.txt for details!
- * *** IMPORTANT NOTE ***
- * This template uses obdev's shared VID/PID pair for Vendor Class devices
- * with libusb: 0x16c0/0x5dc.  Use this VID/PID pair ONLY if you understand
- * the implications!
- */
-#define USB_CFG_DEVICE_VERSION  VERSION_MINOR, VERSION_MAJOR
+#define USB_CFG_DEVICE_VERSION   0x01, 0x03
 /* Version number of the device: Minor number first, then major number.
  */
 #define USB_CFG_VENDOR_NAME     'z','i','a','n'

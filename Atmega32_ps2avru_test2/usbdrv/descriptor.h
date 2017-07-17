@@ -3,7 +3,7 @@
 
 #include <avr/pgmspace.h>
 #include "report.h"
-#include "../device/usbconfig.h"
+#include "usbconfig.h"
 
 ////////////////////////////…Ë÷√
 #define FIXED_CONTROL_ENDPOINT_SIZE      8

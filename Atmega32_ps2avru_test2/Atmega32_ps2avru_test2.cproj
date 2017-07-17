@@ -119,21 +119,6 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="device\eeprominfo.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="device\hardwareconfig.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="device\hardwareinfo.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="device\usbconfig.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="device\version.h">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="Functions.c">
       <SubType>compile</SubType>
     </Compile>
@@ -164,7 +149,7 @@
     <Compile Include="usbdrv\report.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="usbdrv\usbconfig-prototype.h">
+    <Compile Include="usbdrv\usbconfig.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="usbdrv\usbdrv.c">
@@ -187,7 +172,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="device" />
     <Folder Include="usbdrv" />
   </ItemGroup>
   <ItemGroup>
