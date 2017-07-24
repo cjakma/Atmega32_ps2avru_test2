@@ -43,9 +43,7 @@ C_SRCS +=  \
 ../usbdevice.c \
 ../usbdrv/descriptor.c \
 ../usbdrv/oddebug.c \
-../usbdrv/usbdrv.c \
-../usbkeyboard.c \
-../usbmouse.c
+../usbdrv/usbdrv.c
 
 
 PREPROCESSING_SRCS +=  \
@@ -62,9 +60,7 @@ usbdevice.o \
 usbdrv/descriptor.o \
 usbdrv/oddebug.o \
 usbdrv/usbdrv.o \
-usbdrv/usbdrvasm.o \
-usbkeyboard.o \
-usbmouse.o
+usbdrv/usbdrvasm.o
 
 OBJS_AS_ARGS +=  \
 Functions.o \
@@ -73,9 +69,7 @@ usbdevice.o \
 usbdrv/descriptor.o \
 usbdrv/oddebug.o \
 usbdrv/usbdrv.o \
-usbdrv/usbdrvasm.o \
-usbkeyboard.o \
-usbmouse.o
+usbdrv/usbdrvasm.o
 
 C_DEPS +=  \
 Functions.d \
@@ -84,9 +78,7 @@ usbdevice.d \
 usbdrv/descriptor.d \
 usbdrv/oddebug.d \
 usbdrv/usbdrv.d \
-usbdrv/usbdrvasm.d \
-usbkeyboard.d \
-usbmouse.d
+usbdrv/usbdrvasm.d
 
 C_DEPS_AS_ARGS +=  \
 Functions.d \
@@ -95,9 +87,7 @@ usbdevice.d \
 usbdrv/descriptor.d \
 usbdrv/oddebug.d \
 usbdrv/usbdrv.d \
-usbdrv/usbdrvasm.d \
-usbkeyboard.d \
-usbmouse.d
+usbdrv/usbdrvasm.d
 
 OUTPUT_FILE_PATH +=Atmega32_ps2avru_test2.elf
 
@@ -113,10 +103,6 @@ LINKER_SCRIPT_DEP+=
 
 
 # AVR32/GNU C Compiler
-
-
-
-
 
 
 

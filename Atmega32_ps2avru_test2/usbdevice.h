@@ -62,7 +62,7 @@
 #define KEY_ESC		41
 #define KEY_BACKSPACE	42
 #define KEY_TAB		43
-#define KEY_SPACE	44	46
+#define KEY_SPACE	44
 #define KEY_MINUS	45
 #define KEY_EQUAL	46
 #define KEY_LEFT_BRACE	47
@@ -125,6 +125,25 @@
 #define MOUSE_4	1<<3
 #define MOUSE_5	1<<4
 
+#define KEY_FN 0
+#define REPORT_ID_MOUSE     1
+#define REPORT_ID_SYSTEM    2
+#define REPORT_ID_CONSUMER  3
+
+#define AUDIO_MUTE              0xE2
+#define AUDIO_VOL_UP            0xE9
+#define AUDIO_VOL_DOWN          0xEA
+#define TRANSPORT_NEXT_TRACK    0xB5
+#define TRANSPORT_PREV_TRACK    0xB6
+#define TRANSPORT_STOP          0xB7
+#define TRANSPORT_STOP_EJECT    0xCC
+#define TRANSPORT_PLAY_PAUSE    0xCD
+
+/* Generic Desktop Page(0x01) - system power control */
+#define SYSTEM_POWER_DOWN       0x81
+#define SYSTEM_SLEEP            0x82
+#define SYSTEM_WAKE_UP          0x83
+
 typedef struct {
     uint8_t report_id;
 	uint8_t buttons;
@@ -138,10 +157,10 @@ typedef struct {
 	uint16_t usage;
 } __attribute__ ((packed)) report_extra_t;
 typedef struct {
-    uint8_t send_required;
 	report_mouse0_t mouse;
 	report_extra_t system_keys;
 	report_extra_t consumer_keys;
+	uint8_t Send_Required;
 } __attribute__ ((packed)) report_mouse_t;
 typedef struct {
 	uint8_t modifier;
@@ -161,12 +180,14 @@ typedef struct {
 	int8_t h;
 	uint16_t system_keys;
 	uint16_t consumer_keys;
+	uint8_t Send_Required;
 } __attribute__ ((packed)) buffer_mouse_t;
 typedef struct {
 	uint8_t keyboard_modifier_keys;
 	uint8_t keyboard_keys[6];
 	uint8_t keyboard_leds;
 	uint8_t enable_pressing;
+	uint8_t Send_Required;
 }__attribute__ ((packed))  buffer_keyboard_t;
 
 #ifdef MOUSE_ENABLE
@@ -174,7 +195,7 @@ report_mouse_t mouse_report;
 buffer_mouse_t mouse_buffer;
 #endif
 #ifdef RAW_ENABLE
-#define maxEEP (uint16_t)511
+#define maxEEP (uint16_t)0x1FF
 report_raw_t raw_report_in;
 report_raw_t raw_report_out;
 #endif
@@ -184,31 +205,6 @@ buffer_keyboard_t keyboard_buffer;
 void usb_init();
 void ClearKeyboard();
 void ClearMouse();
-void ClearRaw();			// initialize everything
-uint8_t usb_keyboard_send();
-uint8_t usb_mouse_send();
-uint8_t usb_raw_send();
+void ClearRaw();			
 
-void keyPrintChar(usbWord_t data);
-void keyPrintChinese(uint8_t data[5]);
-void keyPrintEnglish(uint8_t data);
-void keyPrintWord(char * word);
-void keyPrintWordFlash(void);
-void keyPrintWordEEP(void);
-void MousePrintMousekey(uint8_t data);
-
-uint8_t releasekey(uint8_t key);
-uint8_t presskey(uint8_t key);
-void releaseAll();
-void pressModifierKeys(uint8_t key);
-void releaseModifierKeys(uint8_t key);
-
-uint8_t getwords2length();
-extern const  uint8_t  words2[] PROGMEM;
-extern const  uint8_t  ascii_to_scan_code_table[] PROGMEM;
-
-void pressmousekey(uint8_t key);
-void releasemousekey(uint8_t key);
-void releaseAllmousekey();
-
-#endif /* USBKEYBOARD_H_ */
+#endif

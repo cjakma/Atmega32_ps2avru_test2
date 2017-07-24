@@ -16,7 +16,3 @@ usbdrv\usbdrv.c
 
 usbdrv\usbdrvasm.s
 
-usbkeyboard.c
-
-usbmouse.c
-

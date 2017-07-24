@@ -164,12 +164,6 @@
     <Compile Include="usbdrv\usbportability.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="usbkeyboard.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="usbmouse.c">
-      <SubType>compile</SubType>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="usbdrv" />
