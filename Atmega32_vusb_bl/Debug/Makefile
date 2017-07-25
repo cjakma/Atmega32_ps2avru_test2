@@ -73,9 +73,9 @@ oddebug.d \
 usbdrv.d \
 usbdrvasm.d
 
-OUTPUT_FILE_PATH +=Atmega32a_bl.elf
+OUTPUT_FILE_PATH +=Atmega32_vusb_bl.elf
 
-OUTPUT_FILE_PATH_AS_ARGS +=Atmega32a_bl.elf
+OUTPUT_FILE_PATH_AS_ARGS +=Atmega32_vusb_bl.elf
 
 ADDITIONAL_DEPENDENCIES:=
 
@@ -140,11 +140,10 @@ all: $(OUTPUT_FILE_PATH) $(ADDITIONAL_DEPENDENCIES)
 $(OUTPUT_FILE_PATH): $(OBJS) $(USER_OBJS) $(OUTPUT_FILE_DEP) $(LIB_DEP) $(LINKER_SCRIPT_DEP)
 	@echo Building target: $@
 	@echo Invoking: AVR/GNU Linker : 5.4.0
-	$(QUOTE)D:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE) -o$(OUTPUT_FILE_PATH_AS_ARGS) $(OBJS_AS_ARGS) $(USER_OBJS) $(LIBS) -Wl,-Map="Atmega32a_bl.map" -Wl,--start-group -Wl,-lm  -Wl,--end-group -Wl,--gc-sections -mmcu=atmega32a -B "D:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.132\gcc\dev\atmega32a"  
+	$(QUOTE)D:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE) -o$(OUTPUT_FILE_PATH_AS_ARGS) $(OBJS_AS_ARGS) $(USER_OBJS) $(LIBS) -Wl,-Map="Atmega32_vusb_bl.map" -Wl,--start-group -Wl,-lm  -Wl,--end-group -Wl,--gc-sections -mmcu=atmega32a -B "D:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.132\gcc\dev\atmega32a"  
 	@echo Finished building target: $@
-	"D:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-objcopy.exe" -O ihex -R .eeprom -R .fuse -R .lock -R .signature -R .user_signatures  "Atmega32a_bl.elf" "Atmega32a_bl.hex"
-	"D:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-objcopy.exe" -j .eeprom  --set-section-flags=.eeprom=alloc,load --change-section-lma .eeprom=0  --no-change-warnings -O ihex "Atmega32a_bl.elf" "Atmega32a_bl.eep" || exit 0
-	"D:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-size.exe" "Atmega32a_bl.elf"
+	"D:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-objcopy.exe" -O ihex -R .eeprom -R .fuse -R .lock -R .signature -R .user_signatures  "Atmega32_vusb_bl.elf" "Atmega32_vusb_bl.hex"
+	"D:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-size.exe" "Atmega32_vusb_bl.elf"
 	
 	
 
@@ -156,5 +155,5 @@ $(OUTPUT_FILE_PATH): $(OBJS) $(USER_OBJS) $(OUTPUT_FILE_DEP) $(LIB_DEP) $(LINKER
 clean:
 	-$(RM) $(OBJS_AS_ARGS) $(EXECUTABLES)  
 	-$(RM) $(C_DEPS_AS_ARGS)   
-	rm -rf "Atmega32a_bl.elf" "Atmega32a_bl.a" "Atmega32a_bl.hex" "Atmega32a_bl.lss" "Atmega32a_bl.eep" "Atmega32a_bl.map" "Atmega32a_bl.srec" "Atmega32a_bl.usersignatures"
+	rm -rf "Atmega32_vusb_bl.elf" "Atmega32_vusb_bl.a" "Atmega32_vusb_bl.hex" "Atmega32_vusb_bl.lss" "Atmega32_vusb_bl.eep" "Atmega32_vusb_bl.map" "Atmega32_vusb_bl.srec" "Atmega32_vusb_bl.usersignatures"
 	
