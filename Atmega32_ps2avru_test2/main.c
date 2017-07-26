@@ -6,11 +6,6 @@
 
 #include "Functions.h"
 
-
-#define ROWS  15
-#define COLS  8
-#define _delay_after 0x09
-#define _delay_before 0x03
 //ledfull D4
 //led D0 D4 D1
 //DAT D3
@@ -184,6 +179,7 @@ void FaceUMode(){
 	usb_keyboard_send();usb_mouse_send();}
 	if(delay_after>0)delay_after-=1;
 	if(delay_before>0)delay_before-=1;
+	usb_update();
 }
 int main(void) {
 	usb_init();	

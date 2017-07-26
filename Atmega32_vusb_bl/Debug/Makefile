@@ -32,18 +32,19 @@ LIB_DEP:=
 LINKER_SCRIPT_DEP:=
 
 # Every subdirectory with source files must be described here
-SUBDIRS := 
+SUBDIRS :=  \
+../usbdrv2
 
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS +=  \
 ../main.c \
-../oddebug.c \
-../usbdrv.c
+../usbdrv2/oddebug.c \
+../usbdrv2/usbdrv.c
 
 
 PREPROCESSING_SRCS +=  \
-../usbdrvasm.S
+../usbdrv2/usbdrvasm.S
 
 
 ASM_SRCS += 
@@ -51,27 +52,27 @@ ASM_SRCS +=
 
 OBJS +=  \
 main.o \
-oddebug.o \
-usbdrv.o \
-usbdrvasm.o
+usbdrv2/oddebug.o \
+usbdrv2/usbdrv.o \
+usbdrv2/usbdrvasm.o
 
 OBJS_AS_ARGS +=  \
 main.o \
-oddebug.o \
-usbdrv.o \
-usbdrvasm.o
+usbdrv2/oddebug.o \
+usbdrv2/usbdrv.o \
+usbdrv2/usbdrvasm.o
 
 C_DEPS +=  \
 main.d \
-oddebug.d \
-usbdrv.d \
-usbdrvasm.d
+usbdrv2/oddebug.d \
+usbdrv2/usbdrv.d \
+usbdrv2/usbdrvasm.d
 
 C_DEPS_AS_ARGS +=  \
 main.d \
-oddebug.d \
-usbdrv.d \
-usbdrvasm.d
+usbdrv2/oddebug.d \
+usbdrv2/usbdrv.d \
+usbdrv2/usbdrvasm.d
 
 OUTPUT_FILE_PATH +=Atmega32_vusb_bl.elf
 
@@ -101,6 +102,13 @@ LINKER_SCRIPT_DEP+=
 	@echo Finished building: $<
 	
 
+usbdrv2/%.o: ../usbdrv2/%.c
+	@echo Building file: $<
+	@echo Invoking: AVR/GNU C Compiler : 5.4.0
+	$(QUOTE)D:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG -DF_CPU=12000000L  -I"D:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.132\include"  -Os -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega32a -B "D:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.132\gcc\dev\atmega32a" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
 
 
 # AVR32/GNU Preprocessing Assembler
@@ -108,7 +116,7 @@ LINKER_SCRIPT_DEP+=
 
 
 # AVR32/GNU Assembler
-./usbdrvasm.o: .././usbdrvasm.S
+usbdrv2/usbdrvasm.o: ../usbdrv2/usbdrvasm.S
 	@echo Building file: $<
 	@echo Invoking: AVR/GNU Assembler : 5.4.0
 	$(QUOTE)D:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE) -Wa,-gdwarf2 -x assembler-with-cpp -c -mmcu=atmega32a -B "D:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.132\gcc\dev\atmega32a" -I "D:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.132\include"  -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)" -Wa,-g   -o "$@" "$<" 
@@ -116,7 +124,7 @@ LINKER_SCRIPT_DEP+=
 	
 
 
-./%.o: .././%.S
+usbdrv2/%.o: ../usbdrv2/%.S
 	@echo Building file: $<
 	@echo Invoking: AVR/GNU Assembler : 5.4.0
 	$(QUOTE)D:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE) -Wa,-gdwarf2 -x assembler-with-cpp -c -mmcu=atmega32a -B "D:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.132\gcc\dev\atmega32a" -I "D:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.132\include"  -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)" -Wa,-g   -o "$@" "$<" 

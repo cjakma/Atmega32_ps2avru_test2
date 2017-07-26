@@ -4,9 +4,9 @@
 
 main.c
 
-oddebug.c
+usbdrv2\oddebug.c
 
-usbdrv.c
+usbdrv2\usbdrv.c
 
-usbdrvasm.S
+usbdrv2\usbdrvasm.S
 

@@ -144,12 +144,12 @@ tuningOverflow:
 
 /* -------------------------- Device Description --------------------------- */
 
-#define  USB_CFG_VENDOR_ID       0xc0, 0x16
+#define  USB_CFG_VENDOR_ID       0xCC, 0xCC
 /* USB vendor ID for the device, low byte first. If you have registered your
  * own Vendor ID, define it here. Otherwise you use obdev's free shared
  * VID/PID pair. Be sure to read USBID-License.txt for rules!
  */
-#define  USB_CFG_DEVICE_ID       0xdf, 0x05
+#define  USB_CFG_DEVICE_ID       0x01, 0x34
 /* This is the ID of the product, low byte first. It is interpreted in the
  * scope of the vendor ID. If you have registered your own VID with usb.org
  * or if you have licensed a PID from somebody else, define it here. Otherwise
@@ -169,8 +169,8 @@ tuningOverflow:
  * obdev's free shared VID/PID pair. See the file USBID-License.txt for
  * details.
  */
-#define USB_CFG_DEVICE_NAME     'H', 'I', 'D', 'B', 'o', 'o', 't'
-#define USB_CFG_DEVICE_NAME_LEN 7
+#define USB_CFG_DEVICE_NAME     'H', 'I', 'D', 'B', 'o', 'o', 't','_','3','2','A'
+#define USB_CFG_DEVICE_NAME_LEN 11
 /* Same as above for the device name. If you don't want a device name, undefine
  * the macros. See the file USBID-License.txt before you assign a name if you
  * use a shared VID/PID.

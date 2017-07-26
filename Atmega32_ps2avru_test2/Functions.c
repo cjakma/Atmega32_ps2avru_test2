@@ -49,7 +49,6 @@ static void vusb_transfer_mouse()
 	}
 }
 static void send_mouse(report_mouse_t *report){
-	
 	uint8_t next = (mbuf_head + 1) % MBUF_SIZE;
 	if (next != mbuf_tail) {
 		mbuf[mbuf_head] = *report;
@@ -76,23 +75,9 @@ uint8_t usb_mouse_send_required(){
 		send_required_t=REPORT_ID_CONSUMER;
 	}
 	if(send_required_t){
-	mouse_buffer.Send_Required=send_required_t;
+		mouse_buffer.Send_Required=send_required_t;
 	}
 	return send_required_t;
-}
-uint8_t usb_mouse_send(){
-	usbPoll();
-	if (usbConfiguration && usbInterruptIsReady3()) {
-		if(mouse_buffer.Send_Required){
-			mouse_report.Send_Required=mouse_buffer.Send_Required;
-			mouse_buffer.Send_Required=0;
-			send_mouse(&mouse_report);
-		}
-		else{
-			usbPoll(); vusb_transfer_mouse();
-		}
-	}
-	return 1;
 }
 uint8_t usb_keyboard_send_required(){
 	uint8_t send_required_t=0;
@@ -113,20 +98,46 @@ uint8_t usb_keyboard_send_required(){
 	if(send_required_t)keyboard_buffer.Send_Required=send_required_t;
 	return send_required_t;
 }
+uint8_t usb_mouse_send(){
+	usbPoll();uint8_t send_required_t=0;
+	uint8_t i=0;
+	while(i<50){
+		if (usbConfiguration && usbInterruptIsReady3() && mouse_buffer.Send_Required) {
+			mouse_report.Send_Required=mouse_buffer.Send_Required;
+			mouse_buffer.Send_Required=0;
+			send_mouse(&mouse_report);
+			send_required_t=1;
+			break;
+		}
+		else{
+			usbPoll(); vusb_transfer_mouse();
+		}
+		i++;
+	}
+	return send_required_t;
+}
 uint8_t usb_keyboard_send(){
-	usbPoll();
-	if (usbConfiguration && usbInterruptIsReady()) {
-		if(keyboard_buffer.Send_Required){
+	usbPoll();uint8_t send_required_t=0;
+	uint8_t i=0;
+	while(i<50){
+	if (usbConfiguration && usbInterruptIsReady() && keyboard_buffer.Send_Required) {	
 			keyboard_buffer.Send_Required=0;
 			send_keyboard(&keyboard_report);
+			send_required_t=1;
+			break;
 		}
 		else{
 			usbPoll(); vusb_transfer_keyboard();
 		}
+		i++;
 	}
-	return 1;
+	return send_required_t;
 }
-
+void usb_update(){
+usbPoll();
+vusb_transfer_keyboard();
+vusb_transfer_mouse();
+}
 ///////////////////////////////////////////////////////////////////////
 uint8_t presskey(uint8_t key)
 {

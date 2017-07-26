@@ -15,11 +15,11 @@
 #include <avr/boot.h>
 #include <string.h>
 #include <util/delay.h>
-#include "bootloaderconfig.h"
-#include "usbdrv.h"
 
 static void leaveBootloader() __attribute__((__noreturn__));
 
+#include "usbdrv2/bootloaderconfig.h"
+#include "usbdrv2/usbdrv.h"
 
 /* ------------------------------------------------------------------------ */
 
@@ -101,7 +101,7 @@ static void leaveBootloader()
     nullVector();
 }
 
-usbMsgLen_t  usbFunctionSetup(uchar data[8])
+uchar   usbFunctionSetup(uchar data[8])
 {
 usbRequest_t    *rq = (void *)data;
 static uchar    replyBuffer[7] = {
@@ -215,7 +215,7 @@ uchar   i = 0;
     sei();
 }
 
-int main()
+int main(void)
 {
     /* initialize hardware */
     bootLoaderInit();
@@ -243,8 +243,9 @@ int main()
                 }
             }
 #endif
-        }while(bootLoaderCondition());
+        }while(1);
     }
     leaveBootloader();
+	return 0;
 }
 

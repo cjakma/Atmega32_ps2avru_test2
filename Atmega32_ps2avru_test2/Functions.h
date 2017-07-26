@@ -20,7 +20,7 @@
 void pinMode(uint8_t IO,uint8_t value);
 void digitalWrite(uint8_t IO,uint8_t value);
 uint8_t digitalRead(uint8_t IO);
-
+void usb_update();
 uint8_t usb_keyboard_send();
 uint8_t usb_mouse_send();
 uint8_t usb_keyboard_send_required();
@@ -33,5 +33,10 @@ void presssystemkey(uint8_t key);
 void pressconsumerkey(uint8_t key);
 void releaseAllmousekeys();
 void releaseAllkeyboardkeys();
+
+#define ROWS  15
+#define COLS  8
+#define _delay_after 0x09
+#define _delay_before 0x03
 
 #endif /* FUNCTIONS_H_ */

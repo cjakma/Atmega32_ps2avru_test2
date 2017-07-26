@@ -108,11 +108,11 @@ these macros are defined, the boot loader usees them.
 #include "avr/io.h"
 static inline void  bootLoaderInit(void)
 {
-    PORTD = 1 << 3; /* activate pull-up for key */
+    PORTD = 1 << 7; /* activate pull-up for key */
     _delay_us(10);  /* wait for levels to stabilize */
 }
 
-#define bootLoaderCondition()   ((PIND & (1 << 3)) == 0)   /* True if jumper is set */
+#define bootLoaderCondition()   ((PIND & (1 << 7)) == 0)   /* True if jumper is set */
 
 #endif
 
