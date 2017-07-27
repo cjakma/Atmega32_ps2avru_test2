@@ -34,8 +34,8 @@ void pressconsumerkey(uint8_t key);
 void releaseAllmousekeys();
 void releaseAllkeyboardkeys();
 
-#define ROWS  15
-#define COLS  8
+#define ROWS  8
+#define COLS  10
 #define _delay_after 0x09
 #define _delay_before 0x03
 

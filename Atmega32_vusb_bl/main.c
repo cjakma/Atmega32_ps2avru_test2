@@ -243,7 +243,7 @@ int main(void)
                 }
             }
 #endif
-        }while(1);
+        }while(bootLoaderCondition());
     }
     leaveBootloader();
 	return 0;
