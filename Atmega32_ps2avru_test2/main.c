@@ -153,8 +153,8 @@ void FaceUMode(){
 	usb_keyboard_send();usb_mouse_send();}
 	if(delay_after==1){
 	usb_keyboard_send();usb_mouse_send();}
-	if(delay_after>0)delay_after-=1;
-	if(delay_before>0)delay_before-=1;
+	if(delay_after>0)delay_after--;
+	if(delay_before>0)delay_before--;
 	usb_update();
 }
 int main(void) {
