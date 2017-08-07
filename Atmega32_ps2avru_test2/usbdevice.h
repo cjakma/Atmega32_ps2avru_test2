@@ -191,7 +191,7 @@ typedef struct {
 	report_mouse0_t mouse;
 	report_extra_t system_keys;
 	report_extra_t consumer_keys;
-	uint8_t Send_Required;
+	//uint8_t Send_Required;
 } __attribute__ ((packed)) report_mouse_t;
 typedef struct {
 	uint8_t modifier;
