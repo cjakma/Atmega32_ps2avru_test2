@@ -43,31 +43,32 @@ uint8_t usb_keyboard_send_required(){
 	return send_required_t;
 }
 uint8_t usb_mouse_send(){
-	uint8_t i=0;
-	while(i<0xFF){
-		usbPoll();
-		if (usbConfiguration && usbInterruptIsReady3()){
+if(mouse_buffer.Send_Required==0)return 0;
+	uint8_t i1=0;
+	while(i1<0xFF){		usbPoll();
+		if (usbConfiguration &&usbInterruptIsReady3()){
 			if(mouse_buffer.Send_Required==REPORT_ID_MOUSE){
 				usbSetInterrupt3((void *)&mouse_report.mouse, sizeof(report_mouse0_t));
 				mouse_buffer.Send_Required=0;
 			}
-
 			return 1;
-		}
+		}	
+		i1++;
 	}
 	return 0;
 }
 uint8_t usb_keyboard_send(){
-	uint8_t i=0;
-	while(i<0xFF){
-		usbPoll();
-		if (usbConfiguration && usbInterruptIsReady()){
+if(keyboard_buffer.Send_Required==0)return 0;
+	uint8_t i2=0;
+	while(i2<0xFF){	usbPoll();	
+		if (usbConfiguration &&usbInterruptIsReady()){
 			if(keyboard_buffer.Send_Required){
 				usbSetInterrupt((void *)&keyboard_report, sizeof(report_keyboard_t));
 				keyboard_buffer.Send_Required=0;
 			}
 			return 1;
 		}
+		i2++;	
 	}
 	return 0;
 }

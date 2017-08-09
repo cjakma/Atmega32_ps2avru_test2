@@ -63,8 +63,8 @@
 #define KEY_BACKSPACE	42
 #define KEY_TAB		43
 #define KEY_SPACE	44
-#define KEY_MINUS	45
-#define KEY_EQUAL	46
+#define KEY_MINUS	45 //-_
+#define KEY_EQUAL	46 //=+
 #define KEY_LEFT_BRACE	47
 #define KEY_RIGHT_BRACE	48
 #define KEY_BACKSLASH	49

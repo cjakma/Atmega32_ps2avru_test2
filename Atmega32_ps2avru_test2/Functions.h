@@ -36,7 +36,7 @@ void releaseAllkeyboardkeys();
 
 #define ROWS  8
 #define COLS  10
-#define _delay_after 0x03
-#define _delay_before 0x03
+#define _delay_after 0x02
+#define _delay_before 0x02
 
 #endif /* FUNCTIONS_H_ */

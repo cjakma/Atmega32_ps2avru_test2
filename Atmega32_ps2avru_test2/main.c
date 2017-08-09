@@ -3,7 +3,7 @@
 #include <avr/pgmspace.h>
 #include <avr/interrupt.h>
 #include <string.h>
-
+#include <avr/wdt.h>
 #include "Functions.h"
 
 //ledfull D4
@@ -20,15 +20,29 @@ uint8_t colPins[COLS]={1,2,3,4,5,6,7,23,22,21};
 #define ledcount 3
 uint8_t ledPins[ledcount]={24,25,28};
 
+void init_cols(){
+	for ( i=0; i<COLS; i++){
+		pinMode(colPins[i],INPUT);
+		digitalWrite(colPins[i],HIGH);
+	}
+}
+void init_rows(){
+	DDRB=0;
+	PORTB=1;
+}
+void matrix_set_row_status(uint8_t row) {
+	DDRB = (1 << row);
+	PORTB = ~(1 << row);
+}
 uint8_t hexaKeys0[ROWS][COLS] = {
 	{KEY_Q,KEY_W,KEY_E,KEY_R,KEY_U,KEY_I,KEY_O,KEY_P,KEY_CTRL,KEY_GUI},//ROW0
 	{KEY_TAB,KEY_CAPS,0x00,KEY_T,KEY_Y,KEY_RIGHT_BRACE,KEY_TILDE,KEY_LEFT_BRACE,KEY_SHIFT,0x00},//ROW1
 	{KEY_A,KEY_S,KEY_D,KEY_F,KEY_J,KEY_K,KEY_L,KEY_SEMICOLON,KEY_RIGHT_CTRL,KEY_BACKSLASH},//ROW2
-	{0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00},//ROW3
-	{0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00},//ROW4
-	{0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00},//ROW5
-	{0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00},//ROW6
-	{KEY_1,KEY_2,KEY_3,KEY_4,KEY_5,KEY_6,KEY_7,KEY_8,KEY_9,KEY_0},//ROW7
+	{0x00,0x00,0x00,KEY_G,KEY_H,0x00,0x00,KEY_QUOTE,KEY_ALT,KEY_SPACE},//ROW3
+	{KEY_Z,KEY_X,KEY_C,KEY_V,KEY_M,KEY_COMMA,KEY_PERIOD,0x00,KEY_RIGHT_SHIFT,KEY_ENTER},//ROW4
+	{0x00,0x00,0x00,KEY_B,KEY_N,0x00,0x00,KEY_FN,KEY_SLASH,KEY_RIGHT_ALT},//ROW5
+	{KEY_ESC,0x00,0x00,KEY_5,KEY_6,KEY_EQUAL,0x00,KEY_MINUS,KEY_FN,KEY_BACKSPACE},//ROW6
+	{KEY_1,KEY_2,KEY_3,KEY_4,KEY_7,KEY_8,KEY_9,KEY_0,0x00,0x00},//ROW7
 };
 uint8_t hexaKeys1[ROWS][COLS] = {
 	{0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00},//ROW0
@@ -44,45 +58,34 @@ uint8_t hexaKeys1[ROWS][COLS] = {
 //type: 1-key 2-modifykey 3-mousekey 4-systemkey 5-consumerkey 6-FN 7-consumerkeyAL,8-consumerkeyAC
 
 uint8_t keymask[ROWS][COLS]={
-	{0x11,0x11,0x11,0x11,0x11,0x11,0x11,0x11,0x11,0x11},//ROW0
-	{0x11,0x11,0x11,0x11,0x11,0x11,0x11,0x11,0x11,0x11},//ROW1
-	{0x11,0x11,0x11,0x11,0x11,0x11,0x11,0x11,0x11,0x11},//ROW2
-	{0x11,0x11,0x11,0x11,0x11,0x11,0x11,0x11,0x11,0x11},//ROW3
-	{0x11,0x11,0x11,0x11,0x11,0x11,0x11,0x11,0x11,0x11},//ROW4
-	{0x11,0x11,0x11,0x11,0x11,0x11,0x11,0x11,0x11,0x11},//ROW5
-	{0x11,0x11,0x11,0x11,0x11,0x11,0x11,0x11,0x11,0x11},//ROW6
-	{0x11,0x11,0x11,0x11,0x11,0x11,0x11,0x11,0x11,0x11},//ROW7
+	{0x11,0x11,0x11,0x11,0x11,0x11,0x11,0x11,0x21,0x21},//ROW0
+	{0x11,0x11,0x01,0x11,0x11,0x11,0x11,0x11,0x21,0x01},//ROW1
+	{0x11,0x11,0x11,0x11,0x11,0x11,0x11,0x11,0x21,0x11},//ROW2
+	{0x01,0x01,0x01,0x11,0x11,0x01,0x01,0x11,0x21,0x11},//ROW3
+	{0x11,0x11,0x11,0x11,0x11,0x11,0x11,0x01,0x21,0x11},//ROW4
+	{0x01,0x01,0x01,0x11,0x11,0x01,0x01,0x61,0x21,0x11},//ROW5
+	{0x11,0x01,0x01,0x11,0x11,0x11,0x01,0x11,0x61,0x11},//ROW6
+	{0x11,0x11,0x11,0x11,0x11,0x11,0x11,0x11,0x01,0x01},//ROW7
 };
 
-void init_cols(){
-	for ( i=0; i<COLS; i++){
-		pinMode(colPins[i],INPUT);
-		digitalWrite(colPins[i],HIGH);
-	}
-}
-void init_rows(){
-	for ( i=0; i<ROWS; i++){
-		pinMode(rowPins[i],INPUT);
-		digitalWrite(rowPins[i],HIGH);
-	}
-}
+
 /////////////////////////////////////////////////////////////////////
 
 void Open_LED(){
 	for ( i=0; i<ledcount; i++){
-		digitalWrite(ledPins[i],LOW);
+		digitalWrite(ledPins[i],HIGH);
 	}
 }
 void Close_LED(){
 
 	for ( i=0; i<ledcount; i++){
-		digitalWrite(ledPins[i],HIGH);
+		digitalWrite(ledPins[i],LOW);
 	}
 }
 void init_LED(){
 	for ( i=0; i<ledcount; i++){
 		pinMode(ledPins[i],OUTPUT);
-		digitalWrite(ledPins[i],LOW);
+		digitalWrite(ledPins[i],HIGH);
 	}
 }
 void LED(){
@@ -91,8 +94,6 @@ void LED(){
 		else{ digitalWrite(ledPins[i],LOW);}
 	}
 }
-
-
 /////////////////////////////////////////////////////////////////////
 uint8_t r,c;
 uint8_t delay_after=0;
@@ -100,8 +101,8 @@ uint8_t delay_before=0;
 void FaceUMode(){
 	FN=0xF0;
 	for (r = 0; r < ROWS; r++) {
-		pinMode(rowPins[r],OUTPUT);
-		digitalWrite(rowPins[r],LOW);
+		matrix_set_row_status(r);
+		_delay_us(5);
 		for (c = 0; c < COLS; c++) {
 			if (digitalRead(colPins[c])) {keymask[r][c]&= ~0x88;}
 			else {keymask[r][c]|= 0x88;delay_after=_delay_after;}
@@ -148,18 +149,17 @@ void FaceUMode(){
 		}
 	}
 	if(usb_keyboard_send_required())delay_before=_delay_before;
-	//if(usb_mouse_send_required())delay_before=_delay_before;
+	if(usb_mouse_send_required())delay_before=_delay_before;
 	if(delay_after==_delay_after && delay_before==1){
 	usb_keyboard_send();
-	//usb_mouse_send();
+	usb_mouse_send();
 	}
 	if(delay_after==1){
 	usb_keyboard_send();
-	//usb_mouse_send();
+	usb_mouse_send();
 	}
 	if(delay_after>0)delay_after--;
-	if(delay_before>0)delay_before--;
-	usb_update();
+	if(delay_before>0)delay_before--;	
 }
 int main(void) {
 	usb_init();	
@@ -170,9 +170,11 @@ int main(void) {
 	releaseAllkeyboardkeys();
 	releaseAllmousekeys();
 	//ResetMatrixFormEEP();
-	while (1) {
+	_delay_ms(500);
+	while (1) {	
 	//if(keyboard_buffer.enable_pressing==1){
 	FaceUMode();
+	usb_update();	
 	LED();	
 	//}	
 	}
