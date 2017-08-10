@@ -42,25 +42,36 @@ uint8_t usb_keyboard_send_required(){
 	if(send_required_t)keyboard_buffer.Send_Required=send_required_t;
 	return send_required_t;
 }
+uint8_t i1=0;
+uint8_t i2=0;
 uint8_t usb_mouse_send(){
-if(mouse_buffer.Send_Required==0)return 0;
-	uint8_t i1=0;
-	while(i1<0xFF){		usbPoll();
+	if(mouse_buffer.Send_Required==0)return 0;
+	i1=0;
+	while(++i1<50){
+		usbPoll();
 		if (usbConfiguration &&usbInterruptIsReady3()){
 			if(mouse_buffer.Send_Required==REPORT_ID_MOUSE){
 				usbSetInterrupt3((void *)&mouse_report.mouse, sizeof(report_mouse0_t));
 				mouse_buffer.Send_Required=0;
 			}
+			else if(mouse_buffer.Send_Required==REPORT_ID_SYSTEM){
+				usbSetInterrupt3((void *)&mouse_report.system_keys, sizeof(report_extra_t));
+				mouse_buffer.Send_Required=0;
+			}
+			else if(mouse_buffer.Send_Required==REPORT_ID_CONSUMER){
+				usbSetInterrupt3((void *)&mouse_report.consumer_keys, sizeof(report_extra_t));
+				mouse_buffer.Send_Required=0;
+			}
 			return 1;
-		}	
-		i1++;
+		}
 	}
 	return 0;
 }
 uint8_t usb_keyboard_send(){
-if(keyboard_buffer.Send_Required==0)return 0;
-	uint8_t i2=0;
-	while(i2<0xFF){	usbPoll();	
+	if(keyboard_buffer.Send_Required==0)return 0;
+	i2=0;
+	while(++i2<50){
+		usbPoll();
 		if (usbConfiguration &&usbInterruptIsReady()){
 			if(keyboard_buffer.Send_Required){
 				usbSetInterrupt((void *)&keyboard_report, sizeof(report_keyboard_t));
@@ -68,7 +79,6 @@ if(keyboard_buffer.Send_Required==0)return 0;
 			}
 			return 1;
 		}
-		i2++;	
 	}
 	return 0;
 }
