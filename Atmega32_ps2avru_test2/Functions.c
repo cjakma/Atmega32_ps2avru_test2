@@ -49,7 +49,7 @@ uint8_t usb_mouse_send(){
 	i1=0;
 	while(++i1<50){
 		usbPoll();
-		if (usbConfiguration &&usbInterruptIsReady3()){
+		if (usbInterruptIsReady3()){
 			if(mouse_buffer.Send_Required==REPORT_ID_MOUSE){
 				usbSetInterrupt3((void *)&mouse_report.mouse, sizeof(report_mouse0_t));
 				mouse_buffer.Send_Required=0;
@@ -72,7 +72,7 @@ uint8_t usb_keyboard_send(){
 	i2=0;
 	while(++i2<50){
 		usbPoll();
-		if (usbConfiguration &&usbInterruptIsReady()){
+		if (usbInterruptIsReady()){
 			if(keyboard_buffer.Send_Required){
 				usbSetInterrupt((void *)&keyboard_report, sizeof(report_keyboard_t));
 				keyboard_buffer.Send_Required=0;

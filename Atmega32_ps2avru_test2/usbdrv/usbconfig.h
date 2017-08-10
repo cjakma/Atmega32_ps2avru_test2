@@ -100,7 +100,7 @@ section at the end of this file).
  * (e.g. HID), but never want to send any data. This option saves a couple
  * of bytes in flash memory and the transmit buffers in RAM.
  */
-#define USB_CFG_INTR_POLL_INTERVAL    1	//200	//
+#define USB_CFG_INTR_POLL_INTERVAL    1	
 /* If you compile a version with endpoint 1 (interrupt-in), this is the poll
  * interval. The value is in milliseconds and must not be less than 10 ms for
  * low speed devices.
@@ -162,7 +162,7 @@ section at the end of this file).
 /* This macro (if defined) is executed when a USB SET_ADDRESS request was
  * received.
  */
-#define USB_COUNT_SOF                   P2U_USB_COUNT_SOF	//0   //
+#define USB_COUNT_SOF                 0//  P2U_USB_COUNT_SOF	//0   //
 /* define this macro to 1 if you need the global variable "usbSofCount" which
  * counts SOF packets. This feature requires that the hardware interrupt is
  * connected to D- instead of D+.
@@ -321,16 +321,13 @@ section at the end of this file).
 
 #define USB_CFG_DESCR_PROPS_DEVICE                  0
 #define USB_CFG_DESCR_PROPS_CONFIGURATION           USB_PROP_IS_DYNAMIC
-//#define USB_CFG_DESCR_PROPS_CONFIGURATION           0
 #define USB_CFG_DESCR_PROPS_STRINGS                 0
 #define USB_CFG_DESCR_PROPS_STRING_0                0
 #define USB_CFG_DESCR_PROPS_STRING_VENDOR           0
 #define USB_CFG_DESCR_PROPS_STRING_PRODUCT          0
 #define USB_CFG_DESCR_PROPS_STRING_SERIAL_NUMBER    0
-#define USB_CFG_DESCR_PROPS_HID                     USB_PROP_IS_DYNAMIC
-//#define USB_CFG_DESCR_PROPS_HID                     0
+#define USB_CFG_DESCR_PROPS_HID                     0
 #define USB_CFG_DESCR_PROPS_HID_REPORT              USB_PROP_IS_DYNAMIC
-//#define USB_CFG_DESCR_PROPS_HID_REPORT              0
 #define USB_CFG_DESCR_PROPS_UNKNOWN                 0
 
 
