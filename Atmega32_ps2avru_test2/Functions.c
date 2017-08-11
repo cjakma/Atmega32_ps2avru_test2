@@ -86,8 +86,7 @@ void usb_update(){
 	usbPoll();
 }
 ///////////////////////////////////////////////////////////////////////
-uint8_t presskey(uint8_t key)
-{
+uint8_t presskey(uint8_t key){
 	uint8_t i;
 	for ( i=0; i < 6; i++) {
 		if (keyboard_buffer.keyboard_keys[i] == key) {
@@ -102,8 +101,7 @@ uint8_t presskey(uint8_t key)
 	}
 	return 0;
 }
-void pressModifierKeys(uint8_t key)
-{
+void pressModifierKeys(uint8_t key){
 	keyboard_buffer.keyboard_modifier_keys|=key;
 }
 void pressmousekey(uint8_t key){
@@ -120,8 +118,7 @@ void releaseAllmousekeys(){
 	mouse_buffer.system_keys=0;
 	mouse_buffer.consumer_keys=0;
 }
-void releaseAllkeyboardkeys()
-{
+void releaseAllkeyboardkeys(){
 	uint8_t i;
 	for ( i=0; i < 6; i++) {
 		keyboard_buffer.keyboard_keys[i] = 0;

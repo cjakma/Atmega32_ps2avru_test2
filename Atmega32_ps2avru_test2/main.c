@@ -150,14 +150,8 @@ void FaceUMode(){
 	}
 	if(usb_keyboard_send_required())delay_before=_delay_before;
 	if(usb_mouse_send_required())delay_before=_delay_before;
-	if(delay_after==_delay_after && delay_before==1){
-	usb_keyboard_send();
-	usb_mouse_send();
-	}
-	if(delay_after==1){
-	usb_keyboard_send();
-	usb_mouse_send();
-	}
+	if(delay_after==_delay_after && delay_before==1){usb_keyboard_send();usb_mouse_send();}
+	if(delay_after==1){usb_keyboard_send();usb_mouse_send();}
 	if(delay_after>0)delay_after--;
 	if(delay_before>0)delay_before--;	
 }
@@ -173,7 +167,7 @@ int main(void) {
 	_delay_ms(500);
 	while (1) {
 		if(keyboard_buffer.enable_pressing==1){
-			FaceUMode();
+			 if (usbConfiguration && usbInterruptIsReady())FaceUMode();
 			usb_update();
 			LED();
 		}

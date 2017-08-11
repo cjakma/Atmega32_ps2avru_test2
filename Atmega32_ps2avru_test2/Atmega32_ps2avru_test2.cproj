@@ -159,9 +159,6 @@
     <Compile Include="usbdrv\oddebug.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="usbdrv\report.h">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="usbdrv\usbconfig.h">
       <SubType>compile</SubType>
     </Compile>

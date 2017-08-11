@@ -221,18 +221,14 @@ typedef struct {
 	uint8_t Send_Required;
 }__attribute__ ((packed))  buffer_keyboard_t;
 
-#ifdef MOUSE_ENABLE
+
 report_mouse_t mouse_report;
 buffer_mouse_t mouse_buffer;
-#endif
-#ifdef RAW_ENABLE
 #define maxEEP (uint16_t)0x1FF
 report_raw_t raw_report_in;
 report_raw_t raw_report_out;
-#endif
 report_keyboard_t keyboard_report;
 buffer_keyboard_t keyboard_buffer;
-
 void usb_init();
 void ClearKeyboard();
 void ClearMouse();

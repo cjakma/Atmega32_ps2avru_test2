@@ -13,27 +13,22 @@ void usb_init()
 	ClearKeyboard();
 	ClearMouse();
 	ClearRaw();
-	
 }
 void ClearMouse(){
-#ifdef MOUSE_ENABLE
-memset(&mouse_report, 0, sizeof(mouse_report));
-memset(&mouse_buffer,0,sizeof(mouse_buffer));
-mouse_report.mouse.report_id= REPORT_ID_MOUSE;
-mouse_report.system_keys.report_id= REPORT_ID_SYSTEM;
-mouse_report.consumer_keys.report_id= REPORT_ID_CONSUMER;
-#endif
+	memset(&mouse_report, 0, sizeof(mouse_report));
+	memset(&mouse_buffer,0,sizeof(mouse_buffer));
+	mouse_report.mouse.report_id= REPORT_ID_MOUSE;
+	mouse_report.system_keys.report_id= REPORT_ID_SYSTEM;
+	mouse_report.consumer_keys.report_id= REPORT_ID_CONSUMER;
 }
 void ClearKeyboard(){
-memset( &keyboard_report, 0,sizeof(keyboard_report));
-memset( &keyboard_buffer, 0,sizeof(keyboard_buffer));
-keyboard_buffer.enable_pressing=1;
+	memset( &keyboard_report, 0,sizeof(keyboard_report));
+	memset( &keyboard_buffer, 0,sizeof(keyboard_buffer));
+	keyboard_buffer.enable_pressing=1;
 }
 void ClearRaw(){
-#ifdef RAW_ENABLE
-memset( &raw_report_in, 0,sizeof(raw_report_in));
-memset(&raw_report_out, 0,sizeof(raw_report_out));
-#endif
+	memset( &raw_report_in, 0,sizeof(raw_report_in));
+	memset(&raw_report_out, 0,sizeof(raw_report_out));
 }
 usbRequest_t* rq ;
 usbMsgLen_t usbFunctionSetup(uchar data[8])
@@ -53,8 +48,8 @@ usbMsgLen_t usbFunctionSetup(uchar data[8])
 		}
 		else if(rq->bRequest == USBRQ_HID_SET_REPORT){
 			if (rq->wValue.word == 0x0200 && rq->wIndex.word == 0) {
-			//rq->wLength.word==0x0001
-				keyboard_buffer.keyboard_leds|=(1<<7);//用最高位标注状态灯，赋值后自动还原0				
+				//rq->wLength.word==0x0001
+				keyboard_buffer.keyboard_leds|=(1<<7);//用最高位标注状态灯，赋值后自动还原0
 			}
 			return USB_NO_MSG;
 		}
