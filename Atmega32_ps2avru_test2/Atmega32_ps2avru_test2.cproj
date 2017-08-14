@@ -147,12 +147,6 @@
     <Compile Include="usbdevice.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="usbdrv\descriptor.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="usbdrv\descriptor.h">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="usbdrv\oddebug.c">
       <SubType>compile</SubType>
     </Compile>

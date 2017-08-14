@@ -1,4 +1,5 @@
 #include "usbdevice.h"
+
 uint8_t vusb_idle_rate = 0;
 void usb_init()
 {

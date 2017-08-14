@@ -41,7 +41,6 @@ C_SRCS +=  \
 ../Functions.c \
 ../main.c \
 ../usbdevice.c \
-../usbdrv/descriptor.c \
 ../usbdrv/oddebug.c \
 ../usbdrv/usbdrv.c
 
@@ -57,7 +56,6 @@ OBJS +=  \
 Functions.o \
 main.o \
 usbdevice.o \
-usbdrv/descriptor.o \
 usbdrv/oddebug.o \
 usbdrv/usbdrv.o \
 usbdrv/usbdrvasm.o
@@ -66,7 +64,6 @@ OBJS_AS_ARGS +=  \
 Functions.o \
 main.o \
 usbdevice.o \
-usbdrv/descriptor.o \
 usbdrv/oddebug.o \
 usbdrv/usbdrv.o \
 usbdrv/usbdrvasm.o
@@ -75,7 +72,6 @@ C_DEPS +=  \
 Functions.d \
 main.d \
 usbdevice.d \
-usbdrv/descriptor.d \
 usbdrv/oddebug.d \
 usbdrv/usbdrv.d \
 usbdrv/usbdrvasm.d
@@ -84,7 +80,6 @@ C_DEPS_AS_ARGS +=  \
 Functions.d \
 main.d \
 usbdevice.d \
-usbdrv/descriptor.d \
 usbdrv/oddebug.d \
 usbdrv/usbdrv.d \
 usbdrv/usbdrvasm.d
@@ -103,8 +98,6 @@ LINKER_SCRIPT_DEP+=
 
 
 # AVR32/GNU C Compiler
-
-
 
 
 

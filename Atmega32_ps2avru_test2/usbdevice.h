@@ -7,7 +7,33 @@
 #include <util/delay.h>
 #include <string.h>
 #include "usbdrv/usbdrv.h"
-#include "usbdrv/descriptor.h"
+#include "usbdrv/usbconfig.h"
+
+#define ENDPOINT0_SIZE		8
+
+#define KEYBOARD_INTERFACE	0
+#define KEYBOARD_ENDPOINT	1
+#define KEYBOARD_SIZE		8
+
+#define MOUSE_INTERFACE KEYBOARD_INTERFACE+1
+#define MOUSE_ENDPOINT	KEYBOARD_ENDPOINT+1
+#define MOUSE_SIZE		8
+
+#define RAW_INTERFACE	 MOUSE_INTERFACE+1
+#define RAW_ENDPOINT_IN	 MOUSE_ENDPOINT+1
+#define RAW_ENDPOINT_OUT MOUSE_ENDPOINT+2
+#define RAW_EPSIZE  8
+
+extern const PROGMEM uint8_t KeyboardReport[];
+extern const PROGMEM uint8_t MouseReport[];
+extern const PROGMEM uint8_t  RawReport[];
+extern const PROGMEM uint8_t  ConsoleReport[];
+extern const PROGMEM uint8_t  DeviceDescriptor[];
+extern const PROGMEM uint8_t  ConfigurationDescriptor[];
+
+#define REPORT_ID_MOUSE     1
+#define REPORT_ID_SYSTEM    2
+#define REPORT_ID_CONSUMER  3
 
 #define KEY_CTRL	0x01
 #define KEY_SHIFT	0x02
@@ -191,7 +217,6 @@ typedef struct {
 	report_mouse0_t mouse;
 	report_extra_t system_keys;
 	report_extra_t consumer_keys;
-	//uint8_t Send_Required;
 } __attribute__ ((packed)) report_mouse_t;
 typedef struct {
 	uint8_t modifier;
@@ -211,6 +236,7 @@ typedef struct {
 	int8_t h;
 	uint16_t system_keys;
 	uint16_t consumer_keys;
+	uint8_t mouse_protocol;
 	uint8_t Send_Required;
 } __attribute__ ((packed)) buffer_mouse_t;
 typedef struct {
@@ -218,6 +244,9 @@ typedef struct {
 	uint8_t keyboard_keys[6];
 	uint8_t keyboard_leds;
 	uint8_t enable_pressing;
+	uint8_t keyboard_idle_config;
+	uint8_t keyboard_idle_count;
+	uint8_t keyboard_protocol;
 	uint8_t Send_Required;
 }__attribute__ ((packed))  buffer_keyboard_t;
 

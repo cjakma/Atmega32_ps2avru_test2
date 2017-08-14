@@ -9,7 +9,137 @@
 
 #include "usbdrv.h"
 #include "oddebug.h"
-
+#include "../usbdevice.h"
+const PROGMEM uint8_t  KeyboardReport[] =
+{
+	0x05, 0x01,          // Usage Page (Generic Desktop),
+	0x09, 0x06,          // Usage (Keyboard),
+	0xA1, 0x01,          // Collection (Application),
+	0x75, 0x01,          //   Report Size (1),
+	0x95, 0x08,          //   Report Count (8),
+	0x05, 0x07,          //   Usage Page (Key Codes),
+	0x19, 0xE0,          //   Usage Minimum (224),
+	0x29, 0xE7,          //   Usage Maximum (231),
+	0x15, 0x00,          //   Logical Minimum (0),
+	0x25, 0x01,          //   Logical Maximum (1),
+	0x81, 0x02,          //   Input (Data, Variable, Absolute), ;Modifier byte
+	0x95, 0x01,          //   Report Count (1),
+	0x75, 0x08,          //   Report Size (8),
+	0x81, 0x03,          //   Input (Constant),                 ;Reserved byte
+	0x95, 0x05,          //   Report Count (5),
+	0x75, 0x01,          //   Report Size (1),
+	0x05, 0x08,          //   Usage Page (LEDs),
+	0x19, 0x01,          //   Usage Minimum (1),
+	0x29, 0x05,          //   Usage Maximum (5),
+	0x91, 0x02,          //   Output (Data, Variable, Absolute), ;LED report
+	0x95, 0x01,          //   Report Count (1),
+	0x75, 0x03,          //   Report Size (3),
+	0x91, 0x03,          //   Output (Constant),                 ;LED report padding
+	0x95, 0x06,          //   Report Count (6),
+	0x75, 0x08,          //   Report Size (8),
+	0x15, 0x00,          //   Logical Minimum (0),
+	0x26, 0xFF, 0x00,    //   Logical Maximum(255),
+	0x05, 0x07,          //   Usage Page (Key Codes),
+	0x19, 0x00,          //   Usage Minimum (0),
+	0x29, 0xFF,          //   Usage Maximum (255),
+	0x81, 0x00,          //   Input (Data, Array),
+	0xc0                 // End Collection
+};
+const  PROGMEM  uint8_t MouseReport[] =
+{
+	/* mouse */
+	0x05, 0x01,                    // USAGE_PAGE (Generic Desktop)
+	0x09, 0x02,                    // USAGE (Mouse)
+	0xa1, 0x01,                    // COLLECTION (Application)
+	0x85, 0x01,         //   REPORT_ID (1)
+	0x09, 0x01,                    //   USAGE (Pointer)
+	0xa1, 0x00,                    //   COLLECTION (Physical)
+	// ----------------------------  Buttons
+	0x05, 0x09,                    //     USAGE_PAGE (Button)
+	0x19, 0x01,                    //     USAGE_MINIMUM (Button 1)
+	0x29, 0x05,                    //     USAGE_MAXIMUM (Button 5)
+	0x15, 0x00,                    //     LOGICAL_MINIMUM (0)
+	0x25, 0x01,                    //     LOGICAL_MAXIMUM (1)
+	0x75, 0x01,                    //     REPORT_SIZE (1)
+	0x95, 0x05,                    //     REPORT_COUNT (5)
+	0x81, 0x02,                    //     INPUT (Data,Var,Abs)
+	0x75, 0x03,                    //     REPORT_SIZE (3)
+	0x95, 0x01,                    //     REPORT_COUNT (1)
+	0x81, 0x03,                    //     INPUT (Cnst,Var,Abs)
+	// ----------------------------  X,Y position
+	0x05, 0x01,                    //     USAGE_PAGE (Generic Desktop)
+	0x09, 0x30,                    //     USAGE (X)
+	0x09, 0x31,                    //     USAGE (Y)
+	0x15, 0x81,                    //     LOGICAL_MINIMUM (-127)
+	0x25, 0x7f,                    //     LOGICAL_MAXIMUM (127)
+	0x75, 0x08,                    //     REPORT_SIZE (8)
+	0x95, 0x02,                    //     REPORT_COUNT (2)
+	0x81, 0x06,                    //     INPUT (Data,Var,Rel)
+	// ----------------------------  Vertical wheel
+	0x09, 0x38,                    //     USAGE (Wheel)
+	0x15, 0x81,                    //     LOGICAL_MINIMUM (-127)
+	0x25, 0x7f,                    //     LOGICAL_MAXIMUM (127)
+	0x35, 0x00,                    //     PHYSICAL_MINIMUM (0)        - reset physical
+	0x45, 0x00,                    //     PHYSICAL_MAXIMUM (0)
+	0x75, 0x08,                    //     REPORT_SIZE (8)
+	0x95, 0x01,                    //     REPORT_COUNT (1)
+	0x81, 0x06,                    //     INPUT (Data,Var,Rel)
+	// ----------------------------  Horizontal wheel
+	0x05, 0x0c,                    //     USAGE_PAGE (Consumer Devices)
+	0x0a, 0x38, 0x02,              //     USAGE (AC Pan)
+	0x15, 0x81,                    //     LOGICAL_MINIMUM (-127)
+	0x25, 0x7f,                    //     LOGICAL_MAXIMUM (127)
+	0x75, 0x08,                    //     REPORT_SIZE (8)
+	0x95, 0x01,                    //     REPORT_COUNT (1)
+	0x81, 0x06,                    //     INPUT (Data,Var,Rel)
+	0xc0,                          //   END_COLLECTION
+	0xc0,                          // END_COLLECTION
+	/* system control */
+	0x05, 0x01,                    // USAGE_PAGE (Generic Desktop)
+	0x09, 0x80,                    // USAGE (System Control)
+	0xa1, 0x01,                    // COLLECTION (Application)
+	0x85, 0x02,        //   REPORT_ID (2)
+	0x15, 0x01,                    //   LOGICAL_MINIMUM (0x1)
+	0x26, 0xb7, 0x00,              //   LOGICAL_MAXIMUM (0xb7)
+	0x19, 0x01,                    //   USAGE_MINIMUM (0x1)
+	0x29, 0xb7,                    //   USAGE_MAXIMUM (0xb7)
+	0x75, 0x10,                    //   REPORT_SIZE (16)
+	0x95, 0x01,                    //   REPORT_COUNT (1)
+	0x81, 0x00,                    //   INPUT (Data,Array,Abs)
+	0xc0,                          // END_COLLECTION
+	/* consumer */
+	0x05, 0x0c,                    // USAGE_PAGE (Consumer Devices)
+	0x09, 0x01,                    // USAGE (Consumer Control)
+	0xa1, 0x01,                    // COLLECTION (Application)
+	0x85, 0x03,      //   REPORT_ID (3)
+	0x15, 0x01,                    //   LOGICAL_MINIMUM (0x1)
+	0x26, 0x9c, 0x02,              //   LOGICAL_MAXIMUM (0x29c)
+	0x19, 0x01,                    //   USAGE_MINIMUM (0x1)
+	0x2a, 0x9c, 0x02,              //   USAGE_MAXIMUM (0x29c)
+	0x75, 0x10,                    //   REPORT_SIZE (16)
+	0x95, 0x01,                    //   REPORT_COUNT (1)
+	0x81, 0x00,                    //   INPUT (Data,Array,Abs)
+	0xc0                        // END_COLLECTION
+};
+const PROGMEM uint8_t  RawReport[] =
+{
+	0x06, 0x31 ,0xFF,//Usage Page (Vendor-Defined 50 31FF)
+	0x09 ,0x74,//Usage (Vendor-Defined 116)
+	0xA1, 0x01,//Collection (Application)
+	0x09 ,0x75,//Usage (Vendor-Defined 117)
+	0x15 ,0x00,//Logical Minimum (0)
+	0x26, 0xFF ,0x00,//Logical Maximum (255 FF00)
+	0x95 ,0x08 ,//Report Count (8)
+	0x75 ,0x08 ,//Report Size (8)
+	0x81 ,0x02 ,//Input (Data,Var,Abs,NWrp,Lin,Pref,NNul,Bit)
+	0x09 ,0x76 ,//Usage (Vendor-Defined 118)
+	0x15, 0x00 ,//Logical Minimum (0)
+	0x26 ,0xFF ,0x00 ,//Logical Maximum (255)
+	0x95 ,0x08 , //Report Count (8)
+	0x75 ,0x08 ,//Report Size (8)
+	0x91 ,0x02, //Output (Data,Var,Abs,NWrp,Lin,Pref,NNul,NVol,Bit)
+	0xC0 //End Collection
+};
 /*
 General Description:
 This module implements the C-part of the USB driver. See usbdrv.h for a
@@ -107,23 +237,20 @@ PROGMEM const int usbDescriptorStringSerialNumber[] = {
 #undef USB_CFG_DESCR_PROPS_DEVICE
 #define USB_CFG_DESCR_PROPS_DEVICE  sizeof(usbDescriptorDevice)
 PROGMEM const char usbDescriptorDevice[] = {    /* USB device descriptor */
-    18,         /* sizeof(usbDescriptorDevice): length of descriptor in bytes */
-    USBDESCR_DEVICE,        /* descriptor type */
-    0x10, 0x01,             /* USB version supported */
-    USB_CFG_DEVICE_CLASS,
-    USB_CFG_DEVICE_SUBCLASS,
-    0,                      /* protocol */
-    8,                      /* max packet size */
-    /* the following two casts affect the first byte of the constant only, but
-     * that's sufficient to avoid a warning with the default values.
-     */
-    (char)USB_CFG_VENDOR_ID,/* 2 bytes */
-    (char)USB_CFG_DEVICE_ID,/* 2 bytes */
-    USB_CFG_DEVICE_VERSION, /* 2 bytes */
-    USB_CFG_DESCR_PROPS_STRING_VENDOR != 0 ? 1 : 0,         /* manufacturer string index */
-    USB_CFG_DESCR_PROPS_STRING_PRODUCT != 0 ? 2 : 0,        /* product string index */
-    USB_CFG_DESCR_PROPS_STRING_SERIAL_NUMBER != 0 ? 3 : 0,  /* serial number string index */
-    1,          /* number of configurations */
+ 0x12,
+ 0x01,
+ 0x10,0x01,//USB Version 0x0110
+ 0x00,
+ 0x00,
+ 0x00,
+ ENDPOINT0_SIZE,
+ USB_CFG_VENDOR_ID,
+ USB_CFG_DEVICE_ID,
+ USB_CFG_DEVICE_VERSION,
+ 0x01,
+ 0x02,
+ 0x00,
+ 0x01
 };
 #endif
 
@@ -138,58 +265,149 @@ PROGMEM const char usbDescriptorDevice[] = {    /* USB device descriptor */
 #undef USB_CFG_DESCR_PROPS_CONFIGURATION
 #define USB_CFG_DESCR_PROPS_CONFIGURATION   sizeof(usbDescriptorConfiguration)
 PROGMEM const char usbDescriptorConfiguration[] = {    /* USB configuration descriptor */
-    9,          /* sizeof(usbDescriptorConfiguration): length of descriptor in bytes */
-    USBDESCR_CONFIG,    /* descriptor type */
-    18 + 7 * USB_CFG_HAVE_INTRIN_ENDPOINT + 7 * USB_CFG_HAVE_INTRIN_ENDPOINT3 +
-                (USB_CFG_DESCR_PROPS_HID & 0xff), 0,
-                /* total length of data returned (including inlined descriptors) */
-    1,          /* number of interfaces in this configuration */
+    9,
+    0x02,
+    9+9+9+7+9+9+7+9+9+7+7,0x00, //9+(9+9+7)+(9+9+7+7)
+    0x03,          /* number of interfaces in this configuration */
     1,          /* index of this configuration */
     0,          /* configuration name string index */
-#if USB_CFG_IS_SELF_POWERED
-    (1 << 7) | USBATTR_SELFPOWER,       /* attributes */
-#else
-    (1 << 7),                           /* attributes */
-#endif
-    USB_CFG_MAX_BUS_POWER/2,            /* max USB current in 2mA units */
-/* interface descriptor follows inline: */
+    0xA0,
+    0xFA, /* max USB current in 2mA units */
+    //Interface Descriptor 0/0 HID, 1 Endpoint
     9,          /* sizeof(usbDescrInterface): length of descriptor in bytes */
-    USBDESCR_INTERFACE, /* descriptor type */
-    0,          /* index of this interface */
+    0x04, /* descriptor type */
+    KEYBOARD_INTERFACE,          /* index of this interface */
     0,          /* alternate setting for this interface */
-    USB_CFG_HAVE_INTRIN_ENDPOINT + USB_CFG_HAVE_INTRIN_ENDPOINT3, /* endpoints excl 0: number of endpoint descriptors to follow */
-    USB_CFG_INTERFACE_CLASS,
-    USB_CFG_INTERFACE_SUBCLASS,
-    USB_CFG_INTERFACE_PROTOCOL,
+    0x01,
+    0x03,
+    0x01,
+    0x01,
     0,          /* string index for interface */
-#if (USB_CFG_DESCR_PROPS_HID & 0xff)    /* HID descriptor */
+    //HID descriptor
     9,          /* sizeof(usbDescrHID): length of descriptor in bytes */
-    USBDESCR_HID,   /* descriptor type: HID */
+    0x21,   /* descriptor type: HID */
     0x01, 0x01, /* BCD representation of HID version */
     0x00,       /* target country code */
     0x01,       /* number of HID Report (or other HID class) Descriptor infos to follow */
     0x22,       /* descriptor type: report */
-    USB_CFG_HID_REPORT_DESCRIPTOR_LENGTH, 0,  /* total length of report descriptor */
-#endif
-#if USB_CFG_HAVE_INTRIN_ENDPOINT    /* endpoint descriptor for endpoint 1 */
-    7,          /* sizeof(usbDescrEndpoint) */
-    USBDESCR_ENDPOINT,  /* descriptor type = endpoint */
-    (char)0x81, /* IN endpoint number 1 */
+    sizeof(KeyboardReport), 0x00,  /* total length of report descriptor */
+    //endpoint descriptor for endpoint 1
+    0x07,          /* sizeof(usbDescrEndpoint) */
+    0x05,  /* descriptor type = endpoint */
+    0x80+KEYBOARD_ENDPOINT, /* IN endpoint number 1 */
     0x03,       /* attrib: Interrupt endpoint */
-    8, 0,       /* maximum packet size */
-    USB_CFG_INTR_POLL_INTERVAL, /* in ms */
-#endif
-#if USB_CFG_HAVE_INTRIN_ENDPOINT3   /* endpoint descriptor for endpoint 3 */
-    7,          /* sizeof(usbDescrEndpoint) */
-    USBDESCR_ENDPOINT,  /* descriptor type = endpoint */
-    (char)(0x80 | USB_CFG_EP3_NUMBER), /* IN endpoint number 3 */
+    KEYBOARD_SIZE,0x00,       /* maximum packet size */
+    0x0A, /* in ms */
+    
+    //Interface Descriptor 1/0 HID, 1 Endpoints
+    0x09,
+    0x04,  //interface
+    MOUSE_INTERFACE,  //interface number
+    0x00,
+    0x01,
+    0x03, //hid
+    0x01, //boot interface
+    0x02, //mouse
+    0x00,
+    //HID descriptor
+    0x09,
+    0x21,
+    0x11, 0x01,
+    0x00,
+    0x01,
+    0x22,
+    sizeof(MouseReport),0x00,
+    //endpoint descriptor for endpoint 4
+    0x07,          /* sizeof(usbDescrEndpoint) */
+    0x05,  /* descriptor type = endpoint */
+    0x80+MOUSE_ENDPOINT, /* IN endpoint number 1 */
     0x03,       /* attrib: Interrupt endpoint */
-    8, 0,       /* maximum packet size */
-    USB_CFG_INTR_POLL_INTERVAL, /* in ms */
-#endif
+    MOUSE_SIZE,0x00,       /* maximum packet size */
+    0x0A, /* in ms */
+    //Interface Descriptor 1/0 HID, 2 Endpoints
+    0x09,
+    0x04,
+    RAW_INTERFACE, //interface number
+    0x00,
+    0x02,
+    0x03,
+    0x00,
+    0x00,
+    0x00,
+    //HID descriptor
+    0x09,
+    0x21,
+    0x11, 0x01,
+    0x00,
+    0x01,
+    0x22,
+    sizeof(RawReport),0x00,
+    //endpoint descriptor for endpoint 2
+    0x07,          /* sizeof(usbDescrEndpoint) */
+    0x05,  /* descriptor type = endpoint */
+    0x80+RAW_ENDPOINT_IN, /* IN endpoint number 1 */
+    0x03,       /* attrib: Interrupt endpoint */
+    RAW_EPSIZE,0x00,       /* maximum packet size */
+    0x01, /* in ms */
+    //endpoint descriptor for endpoint 3
+    0x07,          /* sizeof(usbDescrEndpoint) */
+    0x05,  /* descriptor type = endpoint */
+    RAW_ENDPOINT_OUT, /* IN endpoint number 1 */
+    0x03,       /* attrib: Interrupt endpoint */
+    RAW_EPSIZE,0x00,       /* maximum packet size */
+    0x01 /* in ms */
 };
 #endif
-
+USB_PUBLIC usbMsgLen_t usbFunctionDescriptor(struct usbRequest *rq)
+{
+	usbMsgLen_t len = 0;
+	switch (rq->wValue.bytes[1]) {
+		case USBDESCR_DEVICE:
+		usbMsgPtr =(uchar *)&usbDescriptorDevice;
+		len    = sizeof(usbDescriptorDevice);
+		break;
+		case USBDESCR_CONFIG:
+		//DescriptorType=2
+		usbMsgPtr = (uchar *)&usbDescriptorConfiguration;
+		len    = sizeof(usbDescriptorConfiguration);
+		break;
+		case USBDESCR_HID:
+		//DescriptorType=0x21
+		switch (rq->wValue.bytes[0]) {
+			case KEYBOARD_INTERFACE:
+			usbMsgPtr = (unsigned char  *)(usbDescriptorConfiguration+9+9);
+			len = 9;
+			break;
+			case MOUSE_INTERFACE:
+			usbMsgPtr =(unsigned char *)(usbDescriptorConfiguration+9+9+9+7+9);
+			len    =9;
+			break;
+			case RAW_INTERFACE:
+			usbMsgPtr =(unsigned char *)( usbDescriptorConfiguration+9+9+9+7+9+9+7+9);
+			len    = 9;
+			break;
+		}
+		break;
+		case USBDESCR_HID_REPORT:
+		//DescriptorType=0x22
+		switch (rq->wIndex.word) {
+			case KEYBOARD_INTERFACE:
+			usbMsgPtr = (uchar *)&KeyboardReport;
+			len    = sizeof(KeyboardReport);
+			break;
+			case MOUSE_INTERFACE:
+			usbMsgPtr = (uchar *) &MouseReport;
+			len    = sizeof(MouseReport);
+			break;
+			case RAW_INTERFACE:
+			usbMsgPtr = (uchar *)&RawReport;
+			len    = sizeof(RawReport);
+			break;
+		}
+		break;
+	}
+	return len;
+}
 /* ------------------------------------------------------------------------- */
 
 static inline void  usbResetDataToggling(void)

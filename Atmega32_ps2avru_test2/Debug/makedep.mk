@@ -8,8 +8,6 @@ main.c
 
 usbdevice.c
 
-usbdrv\descriptor.c
-
 usbdrv\oddebug.c
 
 usbdrv\usbdrv.c
