@@ -1,3 +1,0 @@
-faceU=ps2avr
-bface=ps2avrGB
-fuse bit : hfuse = 0xD0, lfuse = 0x0F
