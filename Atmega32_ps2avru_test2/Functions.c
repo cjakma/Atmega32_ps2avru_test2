@@ -125,6 +125,74 @@ void releaseAllkeyboardkeys(){
 	}
 	keyboard_buffer.keyboard_modifier_keys=0;
 }
+void ResetMatrix(uint8_t mask,uint16_t address){
+	uint8_t j=0;
+	for (int r = 0; r < ROWS; r++) {
+		for (int c = 0; c < COLS; c++) {
+			switch (mask){
+				case 0:
+				hexaKeys0[r][c]=eeprom_read_byte((uint8_t *)((uint16_t)j+address));
+				break;
+				case 1:
+				hexaKeys1[r][c]=eeprom_read_byte((uint8_t *)((uint16_t)j+address));
+				break;
+				case 2:
+				keymask[r][c]=eeprom_read_byte((uint8_t *)((uint16_t)j+address));
+				break;
+			}
+			j++;
+		}
+	}
+}
+void ResetMatrixFormEEP(){
+	//////////////////////////////////menu///////////////////////
+	//(u8)address_hexakeys0,(u8)address_hexakeys0,(u16)address_hexakeys0,(u16)address_hexaKeys1,(u16)address_keymask
+	//   10            10+5=15               10+5+14=29               10+5+14+70=99       10+5+14+140=169
+	uint16_t address_row=eeprom_read_word((uint16_t *)0);
+	uint16_t address_col=eeprom_read_word((uint16_t *)2);
+	uint16_t address_hexakeys0=eeprom_read_word((uint16_t *)4);
+	uint16_t address_hexaKeys1=eeprom_read_word((uint16_t *)6);
+	uint16_t address_keymask=eeprom_read_word((uint16_t *)8);
+	uint8_t j;
+	///////////////////////////////////
+	if(address_row==add1){for( j=0;j<ROWS;j++){rowPins[j]=eeprom_read_byte((uint8_t *)((uint16_t)j+address_row));}}
+	if(address_col==add2){for( j=0;j<COLS;j++){colPins[j]=eeprom_read_byte((uint8_t *)((uint16_t)j+address_col));}}
+	if(address_hexakeys0==add3){ResetMatrix(0,address_hexakeys0);}
+	if(address_hexaKeys1==add4){ResetMatrix(1,address_hexaKeys1);}
+	if(address_keymask==add5){ResetMatrix(2,address_keymask);}
+}
+void usbFunctionWriteOut(uchar *data, uchar len){
+	if(len>=2){
+		if(data[0]==0xFF && data[1]==0xF1 && keyboard_buffer.enable_pressing==1 ){
+			keyboard_buffer.enable_pressing=0;
+		}
+		else if(data[0]==0xFF && data[1]==0xF2 && keyboard_buffer.enable_pressing==0 ){
+			Close_LED();
+			keyboard_buffer.enable_pressing=2;
+		}
+		else{	
+			if(keyboard_buffer.enable_pressing==0){
+			Open_LED();
+			for(uint8_t i=0;i<8;i++)raw_report_out.bytes[i]=data[i];
+			uint16_t address=raw_report_out.word[0];				
+				if(address<(maxEEP-1)){
+					eeprom_busy_wait();
+					eeprom_write_word ((uint16_t *)address,raw_report_out.word[1]);
+				}
+				if((address+2)<(maxEEP-1)){
+					eeprom_busy_wait();
+					eeprom_write_word ((uint16_t *)(address+2),raw_report_out.word[2]);
+				}
+				if((address+4)<(maxEEP-1)){
+					eeprom_busy_wait();
+					eeprom_write_word ((uint16_t *)(address+4),raw_report_out.word[3]);
+				}
+				memset(&raw_report_out, 0,sizeof(raw_report_out));
+				Close_LED();
+			}			
+		}
+	}
+}
 #ifdef _AVR_ATMEGA32A_H_INCLUDED
 void pinMode(uint8_t IO,uint8_t value){
 	switch(IO){

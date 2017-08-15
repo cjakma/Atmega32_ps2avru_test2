@@ -65,32 +65,5 @@ uchar usbFunctionWrite(uchar *data, uchar len)
 	}
 	return -1;
 }
-void usbFunctionWriteOut(uchar *data, uchar len){
-	if(len==8){
-		if(data[0]==0xFF && data[1]==0xF1){
-			keyboard_buffer.enable_pressing=0;
-			return;
-		}
-		if(data[0]==0xFF && data[1]==0xF2){
-			keyboard_buffer.enable_pressing=1;
-			return;
-		}
-		PORTB|=(1<<1);
-		uint8_t i=0;
-		for(i=0;i<8;i++)raw_report_out.bytes[i]=data[i];
-		if(raw_report_out.word[0]<maxEEP-1){
-			eeprom_busy_wait();
-			eeprom_write_word ((uint16_t *)raw_report_out.word[0],raw_report_out.word[1]);
-		}
-		if(raw_report_out.word[0]+2<maxEEP-1){
-			eeprom_busy_wait();
-			eeprom_write_word ((uint16_t *)(raw_report_out.word[0]+2),raw_report_out.word[2]);
-		}
-		if(raw_report_out.word[0]+4<maxEEP-1){
-			eeprom_busy_wait();
-			eeprom_write_word ((uint16_t *)(raw_report_out.word[0]+4),raw_report_out.word[3]);
-		}
-		PORTB&= ~(1<<1);
-	}
-}
+
 ////////////////////////////////////////////////////////////////////////////////

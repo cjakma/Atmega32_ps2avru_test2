@@ -153,23 +153,29 @@ void FaceUMode(){
 	if(delay_after==_delay_after && delay_before==1){usb_keyboard_send();usb_mouse_send();}
 	if(delay_after==1){usb_keyboard_send();usb_mouse_send();}
 	if(delay_after>0)delay_after--;
-	if(delay_before>0)delay_before--;	
+	if(delay_before>0)delay_before--;
 }
 int main(void) {
 	usb_init();
 	////////////////////////////////////////////////
 	init_cols();
 	init_rows();
+	while (1) {
 	init_LED();
 	releaseAllkeyboardkeys();
 	releaseAllmousekeys();
-	//ResetMatrixFormEEP();
+	ResetMatrixFormEEP();
 	_delay_ms(500);
+	usb_keyboard_send();
 	while (1) {
-		if(keyboard_buffer.enable_pressing==1){
-			 if (usbConfiguration && usbInterruptIsReady())FaceUMode();
-			usb_update();
-			LED();
+		if(keyboard_buffer.enable_pressing==2){
+			break;
+		}
+		else if(keyboard_buffer.enable_pressing==1){
+				if (usbConfiguration && usbInterruptIsReady())FaceUMode();
+				usb_update();
+				LED();
+				}
 		}
 	}
 	return 0;

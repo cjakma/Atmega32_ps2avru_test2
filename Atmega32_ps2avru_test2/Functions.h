@@ -39,4 +39,25 @@ void releaseAllkeyboardkeys();
 #define _delay_after 0x02
 #define _delay_before 0x02
 
+uint8_t keymask[ROWS][COLS];
+uint8_t hexaKeys1[ROWS][COLS];
+uint8_t hexaKeys0[ROWS][COLS];
+uint8_t rowPins[ROWS];
+uint8_t colPins[COLS];
+
+void init_rows();
+void init_cols();
+void Open_LED();
+void Close_LED();
+void init_LED();
+void LED();
+
+#define add1 10
+#define add2 add1+ROWS
+#define add3 add2+COLS
+#define add4 add3+(ROWS*COLS)
+#define add5 add4+(ROWS*COLS)
+void ResetMatrix(uint8_t mask,uint16_t address);
+void ResetMatrixFormEEP();
+
 #endif /* FUNCTIONS_H_ */
