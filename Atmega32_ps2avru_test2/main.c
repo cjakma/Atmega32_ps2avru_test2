@@ -1,9 +1,5 @@
 
-#include <avr/io.h>
-#include <avr/pgmspace.h>
-#include <avr/interrupt.h>
-#include <string.h>
-#include <avr/wdt.h>
+
 #include "Functions.h"
 
 //ledfull D4
@@ -156,26 +152,26 @@ void FaceUMode(){
 	if(delay_before>0)delay_before--;
 }
 int main(void) {
-	usb_init();
+	usb_init();	 
 	////////////////////////////////////////////////
 	init_cols();
 	init_rows();
 	while (1) {
-	init_LED();
-	releaseAllkeyboardkeys();
-	releaseAllmousekeys();
-	ResetMatrixFormEEP();
-	_delay_ms(500);
-	usb_keyboard_send();
-	while (1) {
-		if(keyboard_buffer.enable_pressing==2){
-			break;
-		}
-		else if(keyboard_buffer.enable_pressing==1){
+		init_LED();
+		releaseAllkeyboardkeys();
+		releaseAllmousekeys();
+		ResetMatrixFormEEP();
+		_delay_ms(500);
+		usb_keyboard_send();
+		while (1) {
+			if(keyboard_buffer.enable_pressing==2){
+				break;
+			}
+			else if(keyboard_buffer.enable_pressing==1){
 				if (usbConfiguration && usbInterruptIsReady())FaceUMode();
 				usb_update();
 				LED();
-				}
+			}
 		}
 	}
 	return 0;

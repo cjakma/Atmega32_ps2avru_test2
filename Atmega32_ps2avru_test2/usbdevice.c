@@ -2,18 +2,21 @@
 
 uint8_t vusb_idle_rate = 0;
 void usb_init()
-{
+{uint8_t i = 0;
 	usbInit();
-	/* enforce USB re-enumerate: */
-	usbDeviceDisconnect();  /* do this while interrupts are disabled */
-	//wdt_reset();
-	/* fake USB disconnect for > 250 ms */
-	_delay_ms(300);
+	usbDeviceDisconnect();  
+	  while(--i){      
+		  wdt_reset();
+		  _delay_ms(1);
+	  }
 	usbDeviceConnect();
 	sei();
 	ClearKeyboard();
 	ClearMouse();
 	ClearRaw();
+	#ifdef CLKPR
+	CLKPR = 0x80, CLKPR = 0;
+	#endif
 }
 void ClearMouse(){
 	memset(&mouse_report, 0, sizeof(mouse_report));
