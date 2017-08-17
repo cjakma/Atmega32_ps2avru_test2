@@ -167,7 +167,8 @@ void ResetMatrixFormEEP(){
 	ResetMatrix(2,address_keymask);
 }
 void usbFunctionWriteOut(uchar *data, uchar len){
-	if(len>=2){
+	if(len==8){
+	uint8_t i=0;
 		if(data[0]==0xFF && data[1]==0xF1 && keyboard_buffer.enable_pressing==1 ){
 			keyboard_buffer.enable_pressing=0;
 		}
@@ -178,7 +179,7 @@ void usbFunctionWriteOut(uchar *data, uchar len){
 		else{	
 			if(keyboard_buffer.enable_pressing==0){
 			Open_LED();
-			for(uint8_t i=0;i<8;i++)raw_report_out.bytes[i]=data[i];
+			for(i=0;i<8;i++)raw_report_out.bytes[i]=data[i];
 			uint16_t address=raw_report_out.word[0];				
 				if(address<(maxEEP-1)){
 					eeprom_busy_wait();
