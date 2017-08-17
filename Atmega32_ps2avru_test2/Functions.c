@@ -155,11 +155,16 @@ void ResetMatrixFormEEP(){
 	uint16_t address_keymask=eeprom_read_word((uint16_t *)8);
 	uint8_t j;
 	///////////////////////////////////
-	if(address_row==add1){for( j=0;j<ROWS;j++){rowPins[j]=eeprom_read_byte((uint8_t *)((uint16_t)j+address_row));}}
-	if(address_col==add2){for( j=0;j<COLS;j++){colPins[j]=eeprom_read_byte((uint8_t *)((uint16_t)j+address_col));}}
-	if(address_hexakeys0==add3){ResetMatrix(0,address_hexakeys0);}
-	if(address_hexaKeys1==add4){ResetMatrix(1,address_hexaKeys1);}
-	if(address_keymask==add5){ResetMatrix(2,address_keymask);}
+	if(address_row!=add1){return;}	
+	if(address_col!=add2){return;}
+	if(address_hexakeys0!=add3){return;}
+	if(address_hexaKeys1!=add4){return;}
+	if(address_keymask!=add5){return;}
+	for( j=0;j<ROWS;j++){rowPins[j]=eeprom_read_byte((uint8_t *)((uint16_t)j+address_row));}
+	for( j=0;j<COLS;j++){colPins[j]=eeprom_read_byte((uint8_t *)((uint16_t)j+address_col));}
+	ResetMatrix(0,address_hexakeys0);
+	ResetMatrix(1,address_hexaKeys1);
+	ResetMatrix(2,address_keymask);
 }
 void usbFunctionWriteOut(uchar *data, uchar len){
 	if(len>=2){
