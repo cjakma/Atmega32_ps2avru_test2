@@ -152,11 +152,11 @@ void FaceUMode(){
 	if(delay_before>0)delay_before--;
 }
 int main(void) {
-	usb_init();	 
+	usb_init();
 	////////////////////////////////////////////////
 	init_cols();
 	init_rows();
-	while (1) {
+	while (1) {		
 		init_LED();
 		releaseAllkeyboardkeys();
 		releaseAllmousekeys();
@@ -164,15 +164,16 @@ int main(void) {
 		_delay_ms(500);
 		usb_keyboard_send();
 		while (1) {
-			if(keyboard_buffer.enable_pressing==2){
+			usb_update();
+		    if(keyboard_buffer.enable_pressing==2){	
+			keyboard_buffer.enable_pressing=1;
 				break;
 			}
 			else if(keyboard_buffer.enable_pressing==1){
 				if (usbConfiguration && usbInterruptIsReady())FaceUMode();
-				usb_update();
 				LED();
 			}
 		}
 	}
-	return 0;
+return 0;
 }

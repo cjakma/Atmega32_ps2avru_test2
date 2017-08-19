@@ -255,7 +255,7 @@ typedef struct {
 
 report_mouse_t mouse_report;
 buffer_mouse_t mouse_buffer;
-#define maxEEP (uint16_t)0x0200
+#define maxEEP (uint16_t)0x01FF
 report_raw_t raw_report_in;
 report_raw_t raw_report_out;
 report_keyboard_t keyboard_report;
