@@ -141,6 +141,12 @@
     <Compile Include="main.c">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="ps2avrU.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="ps2avrGB.c">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="usbdevice.c">
       <SubType>compile</SubType>
     </Compile>

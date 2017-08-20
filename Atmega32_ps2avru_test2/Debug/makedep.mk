@@ -6,6 +6,10 @@ Functions.c
 
 main.c
 
+ps2avrU.c
+
+ps2avrGB.c
+
 usbdevice.c
 
 usbdrv\oddebug.c

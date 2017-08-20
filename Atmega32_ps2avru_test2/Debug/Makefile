@@ -40,6 +40,8 @@ SUBDIRS :=  \
 C_SRCS +=  \
 ../Functions.c \
 ../main.c \
+../ps2avrU.c \
+../ps2avrGB.c \
 ../usbdevice.c \
 ../usbdrv/oddebug.c \
 ../usbdrv/usbdrv.c
@@ -55,6 +57,8 @@ ASM_SRCS +=
 OBJS +=  \
 Functions.o \
 main.o \
+ps2avrU.o \
+ps2avrGB.o \
 usbdevice.o \
 usbdrv/oddebug.o \
 usbdrv/usbdrv.o \
@@ -63,6 +67,8 @@ usbdrv/usbdrvasm.o
 OBJS_AS_ARGS +=  \
 Functions.o \
 main.o \
+ps2avrU.o \
+ps2avrGB.o \
 usbdevice.o \
 usbdrv/oddebug.o \
 usbdrv/usbdrv.o \
@@ -71,6 +77,8 @@ usbdrv/usbdrvasm.o
 C_DEPS +=  \
 Functions.d \
 main.d \
+ps2avrU.d \
+ps2avrGB.d \
 usbdevice.d \
 usbdrv/oddebug.d \
 usbdrv/usbdrv.d \
@@ -79,6 +87,8 @@ usbdrv/usbdrvasm.d
 C_DEPS_AS_ARGS +=  \
 Functions.d \
 main.d \
+ps2avrU.d \
+ps2avrGB.d \
 usbdevice.d \
 usbdrv/oddebug.d \
 usbdrv/usbdrv.d \
@@ -98,6 +108,10 @@ LINKER_SCRIPT_DEP+=
 
 
 # AVR32/GNU C Compiler
+
+
+
+
 
 
 

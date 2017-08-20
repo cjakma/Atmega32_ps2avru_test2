@@ -10,6 +10,22 @@
 #include <avr/io.h>
 #include "usbdevice.h"
 
+
+//#define ps2avrU
+#define ps2avrGB
+
+
+#if defined(ps2avrU)
+#define ROWS  8
+#define COLS  10
+#elif defined(ps2avrGB)
+#define ROWS  5
+#define COLS  15
+#else
+#define ROWS  8
+#define COLS  10
+#endif
+
 #define LOW 0
 #define HIGH 1
 #define INPUT 0
@@ -34,8 +50,7 @@ void pressconsumerkey(uint8_t key);
 void releaseAllmousekeys();
 void releaseAllkeyboardkeys();
 
-#define ROWS  8
-#define COLS  10
+
 #define _delay_after 0x02
 #define _delay_before 0x02
 
@@ -44,7 +59,7 @@ uint8_t hexaKeys1[ROWS][COLS];
 uint8_t hexaKeys0[ROWS][COLS];
 uint8_t rowPins[ROWS];
 uint8_t colPins[COLS];
-
+int init_main(void);
 void init_rows();
 void init_cols();
 void Open_LED();
@@ -59,5 +74,6 @@ void LED();
 #define add5 add4+(ROWS*COLS)
 void ResetMatrix(uint8_t mask,uint16_t address);
 void ResetMatrixFormEEP();
-
+void FaceUMode();
+void BfaceMod();
 #endif /* FUNCTIONS_H_ */
