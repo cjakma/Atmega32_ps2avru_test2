@@ -1,4 +1,5 @@
 #include "Functions.h"
+#include "ws2812.h"
 #ifdef ps2avrGB
 //ps2avrGB rev_SJZZ
 //col A0,A1,A2,A3,A4 A5 A6 A7 C7 C6 C5 C4 C3 C2 D7
@@ -6,11 +7,11 @@
 //usbdrv D5
 //led D0 D1 D6
 //full led  D4 RGB C1
-uint8_t i,delayval,FN;
+uint8_t i,FN;
 uint8_t rowPins[ROWS]={11,12,13,14,15};
 uint8_t colPins[COLS]={0,1,2,3,4,5,6,7,23,22,21,20,19,18,31};
-#define ledcount 3
-uint8_t ledPins[ledcount]={24,25,28};
+#define ledcount 2
+uint8_t ledPins[ledcount]={24,25};
 void init_cols(){
 	for ( i=0; i<COLS; i++){
 		pinMode(colPins[i],INPUT);
@@ -61,16 +62,40 @@ void Close_LED(){
 		digitalWrite(ledPins[i],LOW);
 	}
 }
+uint16_t delayval;
 void init_LED(){
 	for ( i=0; i<ledcount; i++){
 		pinMode(ledPins[i],OUTPUT);
 		digitalWrite(ledPins[i],HIGH);
 	}
+		WS2812Setup();delayval=Maxdelay;
+		WS2812Clear();
+		WS2812Send();
 }
+uint16_t cindex[WS2812_COUNT]={0,34,68,102,136,170};
 void LED(){
 	for ( i=0; i<ledcount; i++){
 		if((keyboard_buffer.keyboard_leds&(1<<i))==(1<<i)){ digitalWrite(ledPins[i],HIGH);}
 		else{ digitalWrite(ledPins[i],LOW);}
+	}
+	if(delayval>=Maxdelay){
+		if((keyboard_buffer.keyboard_leds&(1<<2))==(1<<2)){
+			for(uint8_t i=0;i<WS2812_COUNT;i++){
+				uint8_t r=pgm_read_byte(Rcolors+cindex[i]);
+				uint8_t g=pgm_read_byte(Gcolors+cindex[i]);
+				uint8_t b=pgm_read_byte(Bcolors+cindex[i]);
+				WS2812SetRGB(i,r,g,b);
+				cindex[i]++;
+				if(cindex[i]>=WS2812ColorCount) cindex[i]=0;
+			}
+			}else{
+			WS2812Clear();
+		}
+		delayval--;
+		WS2812Send();
+		}else{
+		if(delayval){delayval--;}
+		else {delayval=Maxdelay;}
 	}
 }
 /////////////////////////////////////////////////////////////////////
@@ -154,7 +179,7 @@ int init_main(void) {
 			}
 			else if(keyboard_buffer.enable_pressing==1){
 				if (usbConfiguration && usbInterruptIsReady())BfaceMod();
-				LED();
+				//LED();
 			}
 		}
 	}

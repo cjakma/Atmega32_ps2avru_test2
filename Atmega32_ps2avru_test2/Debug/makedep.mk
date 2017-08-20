@@ -18,3 +18,5 @@ usbdrv\usbdrv.c
 
 usbdrv\usbdrvasm.s
 
+ws2812.c
+

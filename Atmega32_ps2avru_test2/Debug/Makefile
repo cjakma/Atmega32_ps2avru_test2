@@ -44,7 +44,8 @@ C_SRCS +=  \
 ../ps2avrGB.c \
 ../usbdevice.c \
 ../usbdrv/oddebug.c \
-../usbdrv/usbdrv.c
+../usbdrv/usbdrv.c \
+../ws2812.c
 
 
 PREPROCESSING_SRCS +=  \
@@ -62,7 +63,8 @@ ps2avrGB.o \
 usbdevice.o \
 usbdrv/oddebug.o \
 usbdrv/usbdrv.o \
-usbdrv/usbdrvasm.o
+usbdrv/usbdrvasm.o \
+ws2812.o
 
 OBJS_AS_ARGS +=  \
 Functions.o \
@@ -72,7 +74,8 @@ ps2avrGB.o \
 usbdevice.o \
 usbdrv/oddebug.o \
 usbdrv/usbdrv.o \
-usbdrv/usbdrvasm.o
+usbdrv/usbdrvasm.o \
+ws2812.o
 
 C_DEPS +=  \
 Functions.d \
@@ -82,7 +85,8 @@ ps2avrGB.d \
 usbdevice.d \
 usbdrv/oddebug.d \
 usbdrv/usbdrv.d \
-usbdrv/usbdrvasm.d
+usbdrv/usbdrvasm.d \
+ws2812.d
 
 C_DEPS_AS_ARGS +=  \
 Functions.d \
@@ -92,7 +96,8 @@ ps2avrGB.d \
 usbdevice.d \
 usbdrv/oddebug.d \
 usbdrv/usbdrv.d \
-usbdrv/usbdrvasm.d
+usbdrv/usbdrvasm.d \
+ws2812.d
 
 OUTPUT_FILE_PATH +=Atmega32_ps2avru_test2.elf
 
@@ -108,6 +113,8 @@ LINKER_SCRIPT_DEP+=
 
 
 # AVR32/GNU C Compiler
+
+
 
 
 
