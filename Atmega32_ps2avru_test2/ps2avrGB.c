@@ -70,9 +70,9 @@ void init_LED(){
 	}
 		WS2812Setup();delayval=Maxdelay;
 		WS2812Clear();
-		WS2812Send();
+		WS2812Send2();
 }
-uint16_t cindex[WS2812_COUNT]={0,34,68,102,136,170};
+uint16_t cindex[WS2812_COUNT]={0,34,68,102,136,170,170,136,102,68,34,0};
 void LED(){
 	for ( i=0; i<ledcount; i++){
 		if((keyboard_buffer.keyboard_leds&(1<<i))==(1<<i)){ digitalWrite(ledPins[i],HIGH);}
@@ -92,7 +92,7 @@ void LED(){
 			WS2812Clear();
 		}
 		delayval--;
-		WS2812Send();
+		WS2812Send2();
 		}else{
 		if(delayval){delayval--;}
 		else {delayval=Maxdelay;}
@@ -179,7 +179,7 @@ int init_main(void) {
 			}
 			else if(keyboard_buffer.enable_pressing==1){
 				if (usbConfiguration && usbInterruptIsReady())BfaceMod();
-				//LED();
+				LED();
 			}
 		}
 	}
