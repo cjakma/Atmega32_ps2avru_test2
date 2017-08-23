@@ -209,12 +209,12 @@ section at the end of this file).
  */
 
 /* -------------------------- Device Description --------------------------- */
-#define VENDOR_ID       0xCCCC
-#define PRODUCT_ID      0x3512
+#define VENDOR_ID       0x32A0
+#define PRODUCT_ID      0x0160
 #define DEVICE_VER      0x0001
-#define  USB_CFG_VENDOR_ID       0xCC, 0xCC /* Vendor ID 8352 (= 0x20A0 hex) */
-#define  USB_CFG_DEVICE_ID       0x12, 0x35 /* USB-HOBBY PID: 16941 (= 0x422d hex) */
-#define USB_CFG_DEVICE_VERSION   0x01, 0x03
+#define  USB_CFG_VENDOR_ID       0xA0, 0x32 /* Vendor ID 8352 (= 0x20A0 hex) */
+#define  USB_CFG_DEVICE_ID       0x60, 0x01 /* USB-HOBBY PID: 16941 (= 0x422d hex) */
+#define USB_CFG_DEVICE_VERSION   0x01, 0x00
 /* Version number of the device: Minor number first, then major number.
  */
 #define USB_CFG_VENDOR_NAME     'z','i','a','n'
