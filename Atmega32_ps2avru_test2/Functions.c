@@ -104,9 +104,6 @@ uint8_t presskey(uint8_t key){
 void pressModifierKeys(uint8_t key){
 	keyboard_buffer.keyboard_modifier_keys|=key;
 }
-void pressswitchkey(uint8_t key){
-    switchbuffer^=key;
-}
 void pressmacrokey(uint8_t key){
 	macrobuffer^=key;
 }

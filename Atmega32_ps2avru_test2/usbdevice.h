@@ -203,15 +203,6 @@ extern const PROGMEM uint8_t  ConfigurationDescriptor[];
 #define SYSTEM_SLEEP            0x82
 #define SYSTEM_WAKE_UP          0x83
 
-#define S0 1<<0
-#define S1 1<<1
-#define S2 1<<2
-#define S3 1<<3
-#define S4 1<<4
-#define S5 1<<5
-#define S6 1<<6
-#define S7 1<<7
-
 #define MACRO0 1<<0
 #define MACRO1 1<<1
 #define MACRO2 1<<2
@@ -278,7 +269,6 @@ report_raw_t raw_report_in;
 report_raw_t raw_report_out;
 report_keyboard_t keyboard_report;
 buffer_keyboard_t keyboard_buffer;
-uint8_t switchbuffer;
 uint8_t macrobuffer;
 void usb_init();
 void ClearKeyboard();

@@ -6,7 +6,8 @@
 //row B3 B4 B5 B6 B7
 //usbdrv D5
 //led D0 D1 D6
-//full led  D4 RGB C1
+//fullled  D4 
+//RGB C1
 uint8_t i,FN;
 uint8_t rowPins[ROWS]={11,12,13,14,15};
 uint8_t colPins[COLS]={0,1,2,3,4,5,6,7,23,22,21,20,19,18,31};
@@ -39,16 +40,16 @@ uint8_t hexaKeys1[ROWS][COLS] = {
 	{KEY_TILDE,KEY_F1,KEY_F2,KEY_F3,KEY_F4,KEY_F5,KEY_F6,KEY_F7,KEY_F8,KEY_F9,KEY_F10,KEY_F11,KEY_F12,0x00,KEY_DELETE},
 	{KEY_TAB,KEYPAD_1,KEYPAD_2,KEYPAD_3,KEYPAD_4,KEYPAD_5,KEYPAD_6,KEYPAD_7,KEYPAD_8,KEYPAD_9,KEYPAD_0,KEYPAD_MINUS,KEYPAD_PLUS,KEY_BACKSLASH,0x00},
 	{KEY_CAPS_LOCK, MOUSE_LEFT,MOUSE_MID,MOUSE_RIGHT,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,KEY_ENTER,0x00},
-	{KEY_LEFT_SHIFT,0x00,KEY_NUM_LOCK ,KEY_SCROLL_LOCK,KEY_INSERT,KEY_PRINTSCREEN,0x00,S1,S2,AUDIO_VOL_DOWN,AUDIO_VOL_UP,AUDIO_MUTE,KEY_RIGHT_SHIFT,KEY_UP,0x00},
+	{KEY_LEFT_SHIFT,0x00,KEY_NUM_LOCK ,KEY_SCROLL_LOCK,KEY_INSERT,KEY_PRINTSCREEN,MACRO0,MACRO1,MACRO2,AUDIO_VOL_DOWN,AUDIO_VOL_UP,AUDIO_MUTE,KEY_RIGHT_SHIFT,KEY_UP,0x00},
 	{KEY_LEFT_CTRL,KEY_FN,KEY_LEFT_ALT,0x00,0x00,0x00,0x00,KEY_SPACE,0x00,KEY_FN,KEY_RIGHT_ALT,KEY_LEFT,KEY_DOWN,KEY_RIGHT,0x00}
 };
 //keymask£¨8bit£©bit:7-press 654-hexatype0 3-press 210-hexatype1
-//hexatype£¨3bit£©value: 1-key 2-modifykey 3-mousekey 4-systemkey 5-consumerkey 6-FN 7-Switch,8-macro
+//hexatype£¨3bit£©value: 1-key 2-modifykey 3-mousekey 4-systemkey 5-consumerkey 6-FN 7-macro
 uint8_t keymask[ROWS][COLS] = {
 	{0x11,0x11,0x11,0x11,0x11,0x11,0x11,0x11,0x11,0x11,0x11,0x11,0x11,0x10,0x11},
 	{0x11,0x11,0x11,0x11,0x11,0x11,0x11,0x11,0x11,0x11,0x11,0x11,0x11,0x11,0x00},
 	{0x11,0x13,0x13,0x13,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x00,0x11,0x00},
-	{0x22,0x00,0x11,0x11,0x11,0x11,0x10,0x17,0x17,0x15,0x15,0x15,0x22,0x11,0x10},
+	{0x22,0x00,0x11,0x11,0x11,0x11,0x17,0x17,0x17,0x15,0x15,0x15,0x22,0x11,0x10},
 	{0x22,0x66,0x22,0x00,0x00,0x00,0x00,0x11,0x00,0x66,0x22,0x11,0x11,0x11,0x00}
 };
 /////////////////////////////////////////////////////////////////////
@@ -70,7 +71,7 @@ void init_LED(){
 		digitalWrite(ledPins[i],HIGH);
 	}
 	pinMode(fullled,OUTPUT);
-	digitalWrite(fullled,LOW);
+	digitalWrite(fullled,HIGH);
 
 		WS2812Setup();delayval=Maxdelay;
 		WS2812Clear();
@@ -82,11 +83,10 @@ void LED(){
 		if((keyboard_buffer.keyboard_leds&(1<<i))==(1<<i)){ digitalWrite(ledPins[i],HIGH);}
 		else{ digitalWrite(ledPins[i],LOW);}
 	}
-	if((switchbuffer&(1<<0))==(1<<0)){
-	digitalWrite(fullled,HIGH);
-	}else{digitalWrite(fullled,LOW);}
+	if((macrobuffer & (1<<0))==(1<<0)){digitalWrite(fullled,HIGH);}
+	else{digitalWrite(fullled,LOW);}
 	if(delayval>=Maxdelay){
-		if((switchbuffer&(1<<1))==(1<<1)){
+		if((macrobuffer & (1<<1))==(1<<1)){
 			for(uint8_t i=0;i<WS2812_COUNT;i++){
 				uint8_t r=pgm_read_byte(Rcolors+cindex[i]);
 				uint8_t g=pgm_read_byte(Gcolors+cindex[i]);
@@ -141,9 +141,6 @@ void BfaceMod(){
 				case 0xD0:
 				pressconsumerkey(hexaKeys0[r][c]);
 				break;
-				case 0xE0:
-				pressswitchkey(hexaKeys0[r][c]);
-				break;
 				case 0xF0:
 				pressmacrokey(hexaKeys0[r][c]);
 				break;
@@ -163,9 +160,6 @@ void BfaceMod(){
 				case 0x0D:
 				pressconsumerkey(hexaKeys1[r][c]);
 				break;
-				case 0x0E:
-				pressswitchkey(hexaKeys1[r][c]);
-				break;
 				case 0x0F:
 				pressmacrokey(hexaKeys1[r][c]);
 				break;
@@ -180,9 +174,7 @@ void BfaceMod(){
 	if(delay_before>0)delay_before--;
 }
 int init_main(void) {
-DDRD|=(1<<5);
-PORTD|=(1<<5);
-switchbuffer=0;
+//DDRD|=(1<<5);PORTD|=(1<<5);
 	usb_init();
 	////////////////////////////////////////////////
 	init_cols();
