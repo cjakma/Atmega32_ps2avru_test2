@@ -49,8 +49,7 @@ uint8_t hexaKeys1[ROWS][COLS] = {
 	{KEY_F1,KEY_F2,KEY_F3,KEY_F4,KEY_F7,KEY_F8,KEY_F9,KEY_F10,0x00,0x00},//ROW7
 };
 //keymask_bits:7-press 654-hexatype0 3-press 210-hexatype1
-//type: 1-key 2-modifykey 3-mousekey 4-systemkey 5-consumerkey 6-FN 7-consumerkeyAL,8-consumerkeyAC
-
+//type: 1-key 2-modifykey 3-mousekey 4-systemkey 5-consumerkey 6-FN 7-Switch,8-macro
 uint8_t keymask[ROWS][COLS]={
 	{0x10,0x11,0x10,0x10,0x10,0x10,0x10,0x10,0x22,0x66},//ROW0
 	{0x11,0x11,0x00,0x10,0x10,0x10,0x10,0x10,0x22,0x00},//ROW1

@@ -42,8 +42,8 @@ uint8_t hexaKeys1[ROWS][COLS] = {
 	{KEY_LEFT_SHIFT,0x00,KEY_NUM_LOCK ,KEY_SCROLL_LOCK,KEY_INSERT,KEY_PRINTSCREEN,0x00,S1,S2,AUDIO_VOL_DOWN,AUDIO_VOL_UP,AUDIO_MUTE,KEY_RIGHT_SHIFT,KEY_UP,0x00},
 	{KEY_LEFT_CTRL,KEY_FN,KEY_LEFT_ALT,0x00,0x00,0x00,0x00,KEY_SPACE,0x00,KEY_FN,KEY_RIGHT_ALT,KEY_LEFT,KEY_DOWN,KEY_RIGHT,0x00}
 };
-//keymask_bits:7-press 654-hexatype0 3-press 210-hexatype1
-//type: 1-key 2-modifykey 3-mousekey 4-systemkey 5-consumerkey 6-FN 7-Switch,8-macro
+//keymask£®8bit£©bit:7-press 654-hexatype0 3-press 210-hexatype1
+//hexatype£®3bit£©value: 1-key 2-modifykey 3-mousekey 4-systemkey 5-consumerkey 6-FN 7-Switch,8-macro
 uint8_t keymask[ROWS][COLS] = {
 	{0x11,0x11,0x11,0x11,0x11,0x11,0x11,0x11,0x11,0x11,0x11,0x11,0x11,0x10,0x11},
 	{0x11,0x11,0x11,0x11,0x11,0x11,0x11,0x11,0x11,0x11,0x11,0x11,0x11,0x11,0x00},
@@ -107,8 +107,8 @@ void LED(){
 }
 /////////////////////////////////////////////////////////////////////
 uint8_t r,c;
-uint8_t delay_after=0;
-uint8_t delay_before=0;
+uint8_t delay_after=0;//backswing ∫Û“°
+uint8_t delay_before=0;//windup «∞“°
 void BfaceMod(){
 	FN=0xF0;
 	for (r = 0; r < ROWS; r++) {
