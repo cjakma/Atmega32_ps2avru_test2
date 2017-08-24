@@ -141,10 +141,10 @@
     <Compile Include="main.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="ps2avrU.c">
+    <Compile Include="matrix\bface60SJZZ.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="ps2avrGB.c">
+    <Compile Include="matrix\ps2avrU.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="usbdevice.c">
@@ -182,6 +182,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="matrix" />
     <Folder Include="usbdrv" />
   </ItemGroup>
   <ItemGroup>

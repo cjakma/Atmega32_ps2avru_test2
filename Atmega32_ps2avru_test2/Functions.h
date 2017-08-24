@@ -12,13 +12,13 @@
 
 
 //#define ps2avrU
-#define ps2avrGB
+#define SJZZ
 
 
 #if defined(ps2avrU)
 #define ROWS  8
 #define COLS  10
-#elif defined(ps2avrGB)
+#elif defined(SJZZ)
 #define ROWS  5
 #define COLS  15
 #else
@@ -49,8 +49,8 @@ void presssystemkey(uint8_t key);
 void pressconsumerkey(uint8_t key);
 void releaseAllmousekeys();
 void releaseAllkeyboardkeys();
-
-
+void pressswitchkey(uint8_t key);
+void pressmacrokey(uint8_t key);
 #define _delay_after 0x02
 #define _delay_before 0x02
 

@@ -14,6 +14,8 @@ void usb_init()
 	ClearKeyboard();
 	ClearMouse();
 	ClearRaw();
+	switchbuffer=0;
+	macrobuffer=0;
 	#ifdef CLKPR
 	CLKPR = 0x80, CLKPR = 0;
 	#endif
