@@ -203,14 +203,21 @@ extern const PROGMEM uint8_t  ConfigurationDescriptor[];
 #define SYSTEM_SLEEP            0x82
 #define SYSTEM_WAKE_UP          0x83
 
-#define MACRO0 1<<0
-#define MACRO1 1<<1
-#define MACRO2 1<<2
-#define MACRO3 1<<3
-#define MACRO4 1<<4
-#define MACRO5 1<<5
-#define MACRO6 1<<6
-#define MACRO7 1<<7
+uint8_t macroreport;
+uint8_t macrobuffer;
+static inline void ClearMacro(){macrobuffer=0;macroreport=0;}
+static inline void pressmacrokey(uint8_t key){macrobuffer^=key;}
+static inline uint8_t usb_macro_send_required(){return(macroreport!=macrobuffer);}
+uint8_t usb_macro_send();
+//前4个macro是被预定的，后四个自定义
+#define MACRO0 0x01//full led
+#define MACRO1 0x02//rgb led
+#define MACRO2 0x04//esc ~
+#define MACRO3 0x08//print eep
+#define MACRO4 0x10
+#define MACRO5 0x20
+#define MACRO6 0x40
+#define MACRO7 0x80
 
 typedef struct {
     uint8_t report_id;
@@ -260,19 +267,19 @@ typedef struct {
 	uint8_t keyboard_protocol;
 	uint8_t Send_Required;
 }__attribute__ ((packed))  buffer_keyboard_t;
-
-
+report_mouse_t print_mouse_report;
 report_mouse_t mouse_report;
 buffer_mouse_t mouse_buffer;
 #define maxEEP (uint16_t)0x01FF
 report_raw_t raw_report_in;
 report_raw_t raw_report_out;
+report_keyboard_t print_keyboard_report;
 report_keyboard_t keyboard_report;
 buffer_keyboard_t keyboard_buffer;
-uint8_t macrobuffer;
 void usb_init();
 void ClearKeyboard();
 void ClearMouse();
 void ClearRaw();			
 
+extern const  uint8_t  ascii_to_scan_code_table[] PROGMEM;
 #endif

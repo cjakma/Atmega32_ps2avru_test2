@@ -104,9 +104,6 @@ uint8_t presskey(uint8_t key){
 void pressModifierKeys(uint8_t key){
 	keyboard_buffer.keyboard_modifier_keys|=key;
 }
-void pressmacrokey(uint8_t key){
-	macrobuffer^=key;
-}
 void pressmousekey(uint8_t key){
 	mouse_buffer.mouse_keys|=key;
 }
@@ -114,7 +111,30 @@ void presssystemkey(uint8_t key){
 	mouse_buffer.system_keys=(uint16_t)key;
 }
 void pressconsumerkey(uint8_t key){
-	mouse_buffer.consumer_keys=(uint16_t)key;
+	uint8_t mask_t=key&0xF0;
+	switch(mask_t){
+		case 0xB0:
+		mouse_buffer.consumer_keys=0x0000|key;
+		break;
+		case 0xC0:
+		mouse_buffer.consumer_keys=0x0000|key;
+		break;
+		case 0xE0:
+		mouse_buffer.consumer_keys=0x0000|key;
+		break;
+		case 0x80:
+		mouse_buffer.consumer_keys=0x0100|key;
+		break;
+		case 0x90:
+		mouse_buffer.consumer_keys=0x0100|key;
+		break;
+		case 0x20:
+		mouse_buffer.consumer_keys=0x0200|key;
+		break;
+		case 0x00:
+		mouse_buffer.consumer_keys=0x0200|key;
+		break;
+	}
 }
 void releaseAllmousekeys(){
 	mouse_buffer.mouse_keys=0;
@@ -158,7 +178,7 @@ void ResetMatrixFormEEP(){
 	uint16_t address_keymask=eeprom_read_word((uint16_t *)8);
 	uint8_t j;
 	///////////////////////////////////
-	if(address_row!=add1){return;}	
+	if(address_row!=add1){return;}
 	if(address_col!=add2){return;}
 	if(address_hexakeys0!=add3){return;}
 	if(address_hexaKeys1!=add4){return;}
@@ -174,7 +194,7 @@ void usbFunctionWriteOut(uchar *data, uchar len){
 		uint8_t i=0;
 		memset(&raw_report_out, 0,sizeof(raw_report_out));
 		for(i=0;i<8;i++)raw_report_out.bytes[i]=data[i];
-		uint16_t address=raw_report_out.word[0];		
+		uint16_t address=raw_report_out.word[0];
 		if(address==0xF1FF && keyboard_buffer.enable_pressing==1 ){
 			keyboard_buffer.enable_pressing=0;
 		}
@@ -322,4 +342,127 @@ uint8_t digitalRead(uint8_t IO){
 	return value;
 }
 #endif
-
+////////////////////////print//////////////////////
+uint8_t usb_macro_send(){
+	if(macroreport==macrobuffer)return 1;
+	macroreport=macrobuffer;
+	if((macroreport&MACRO2)==MACRO2){
+		uint8_t i;
+		keyboard_buffer.Send_Required=1;
+		if(keyboard_report.modifier&0x22){
+			for ( i=0; i < 6; i++) {
+				if (keyboard_report.keycode[i] == KEY_TILDE) {return 0;}
+			}
+			for ( i=0; i < 6; i++) {
+				if (keyboard_report.keycode[i] == 0)
+				{keyboard_report.keycode[i] = KEY_TILDE;return 0;}
+			}
+		}
+		else{
+			for ( i=0; i < 6; i++) {
+				if (keyboard_report.keycode[i] == KEY_ESC) {return 0;}
+			}
+			for ( i=0; i < 6; i++) {
+				if (keyboard_report.keycode[i] == 0)
+				{keyboard_report.keycode[i] = KEY_ESC;return 0;}
+			}
+		}
+	}
+	return 0;
+}
+void keyPrintChinese(uint8_t data[5]){
+memset( &print_keyboard_report, 0,sizeof(keyboard_report));
+	while(1){usbPoll();
+		if(usbConfiguration && usbInterruptIsReady()){
+			print_keyboard_report.modifier = 0x40;
+			print_keyboard_report.keycode[0] =0;
+			usbSetInterrupt((void *)&print_keyboard_report, sizeof(report_keyboard_t));
+			break;
+		}
+	}usbPoll();
+	uint8_t i=0;
+	for( i=0;i<5;i++){
+		while(1){usbPoll();
+			if(usbConfiguration && usbInterruptIsReady()){
+				print_keyboard_report.keycode[0]=98;
+				if(data[i]>0){print_keyboard_report.keycode[0]=data[i]+88;}
+				usbSetInterrupt((void *)&print_keyboard_report, sizeof(report_keyboard_t));
+				break;
+			}
+		}usbPoll();
+		while(1){usbPoll();
+			if(usbConfiguration && usbInterruptIsReady()){
+				print_keyboard_report.keycode[0] =0;
+				usbSetInterrupt((void *)&print_keyboard_report, sizeof(report_keyboard_t));
+				break;
+			}
+		}usbPoll();
+	}
+	while(1){usbPoll();
+		if(usbConfiguration && usbInterruptIsReady()){
+			print_keyboard_report.modifier = 0;
+			print_keyboard_report.keycode[0] =0;
+			usbSetInterrupt((void *)&print_keyboard_report, sizeof(report_keyboard_t));
+			break;
+		}
+	}usbPoll();
+}
+void keyPrintEnglish(uint8_t data)
+{
+	if(data==0)return;
+	memset( &print_keyboard_report, 0,sizeof(keyboard_report));
+	while(1){usbPoll();
+		if(usbConfiguration && usbInterruptIsReady()){
+			print_keyboard_report.modifier = (data >> 7) ? 0x20 : 0x00;//shift加了128
+			print_keyboard_report.keycode[0] =data & 0b01111111;//abs删除正负号
+			usbSetInterrupt((void *)&print_keyboard_report, sizeof(report_keyboard_t));
+			break;
+		}
+	}usbPoll();
+	while(1){usbPoll();
+		if(usbConfiguration && usbInterruptIsReady()){
+			print_keyboard_report.modifier = 0;
+			print_keyboard_report.keycode[0] =0;
+			usbSetInterrupt((void *)&print_keyboard_report, sizeof(report_keyboard_t));
+			break;
+		}
+	}usbPoll();
+}
+void keyPrintChar(uint16_t data_t){
+usbWord_t data=(usbWord_t)data_t;
+	if(data.bytes[1]==0x00){
+		keyPrintEnglish(data.bytes[0]);
+		}else{
+		uint16_t out=(uint16_t)data.word;
+		//out|=0x8080;//汉字内码每个byte最高位为1
+		uint8_t datachinese[5];
+		datachinese[4]=out%10;out=out/10;
+		datachinese[3]=out%10;out=out/10;
+		datachinese[2]=out%10;out=out/10;
+		datachinese[1]=out%10;out=out/10;
+		datachinese[0]=out;
+		keyPrintChinese(datachinese);
+	}
+}
+void keyPrintWord(char * word){
+	uint8_t i=0;
+	uint8_t len=strlen(word);
+	for(i=0;i<len;i++){
+		while(1){
+			if(usbConfiguration && usbInterruptIsReady()){
+				uint8_t data = pgm_read_byte_near(ascii_to_scan_code_table + word[i]);
+				keyPrintEnglish(data);
+				break;
+			}usbPoll();
+		}
+	}
+}
+void keyPrintWordEEP(uint16_t address_t){
+	uint16_t len=eeprom_read_word((uint16_t *)address_t);
+	for(uint16_t i=0;i<len;i++){
+		uint16_t address=address_t+i*2+2;
+		if(address>maxEEP)break;
+		uint16_t data = eeprom_read_word((uint16_t *)address);
+		keyPrintChar(data);
+	}
+}

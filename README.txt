@@ -1,7 +1,7 @@
-Atmega32_ps2avru
+﻿Atmega32_ps2avru
 Atmega32U4_GH60
 -------------------------------------
-直接6pin刷上去 hfuse D0 lfuse 0F 
+1 直接6pin刷上去 hfuse D0 lfuse 0F 
 千万不能用bface和faceU的bootloader！
 2 罕见故障。
 刷完固件后，键盘灯正常，识别正常，但是不出字。
