@@ -95,7 +95,7 @@ void FaceUMode(){
 	FN=0xF0;
 	for (r = 0; r < ROWS; r++) {
 		matrix_set_row_status(r);
-		_delay_us(5);
+		//_delay_us(5);
 		for (c = 0; c < COLS; c++) {
 			if (digitalRead(colPins[c])) {keymask[r][c]&= ~0x88;}
 			else {keymask[r][c]|= 0x88;delay_after=_delay_after;}
@@ -167,8 +167,10 @@ int init_main(void) {
 				break;
 			}
 			else if(keyboard_buffer.enable_pressing==1){
-				if (usbConfiguration && usbInterruptIsReady())FaceUMode();
+				if (usbConfiguration && usbInterruptIsReady()){
+				FaceUMode();
 				LED();
+				}
 			}
 		}
 	}
