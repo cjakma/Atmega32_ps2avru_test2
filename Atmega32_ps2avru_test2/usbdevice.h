@@ -29,9 +29,6 @@
 extern const PROGMEM uint8_t KeyboardReport[];
 extern const PROGMEM uint8_t MouseReport[];
 extern const PROGMEM uint8_t  RawReport[];
-extern const PROGMEM uint8_t  ConsoleReport[];
-extern const PROGMEM uint8_t  DeviceDescriptor[];
-extern const PROGMEM uint8_t  ConfigurationDescriptor[];
 
 #define REPORT_ID_MOUSE     1
 #define REPORT_ID_SYSTEM    2
@@ -154,9 +151,6 @@ extern const PROGMEM uint8_t  ConfigurationDescriptor[];
 #define MOUSE_5	1<<4
 
 #define KEY_FN 0
-#define REPORT_ID_MOUSE     1
-#define REPORT_ID_SYSTEM    2
-#define REPORT_ID_CONSUMER  3
 
 #define AUDIO_MUTE              0xE2
 #define AUDIO_VOL_UP            0xE9
