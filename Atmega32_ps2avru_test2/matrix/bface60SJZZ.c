@@ -181,8 +181,7 @@ void BfaceMod(){
 	if(delay_after>0)delay_after-=1;
 	if(delay_before>0)delay_before-=1;
 }
-int init_main(void) {
-	//DDRD|=(1<<5);PORTD|=(1<<5);
+int init_main(void) {	
 	usb_init();
 	////////////////////////////////////////////////
 	init_cols();

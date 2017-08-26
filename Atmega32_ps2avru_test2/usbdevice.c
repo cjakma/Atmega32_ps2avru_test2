@@ -2,6 +2,7 @@
 
 uint8_t vusb_idle_rate = 0;
 void usb_init(){
+//DDRD|=(1<<5);PORTD|=(1<<5);
 uint8_t i = 0;
 	usbInit();
 	usbDeviceDisconnect();  

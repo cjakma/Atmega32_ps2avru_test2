@@ -45,8 +45,8 @@ void presssystemkey(uint8_t key);
 void pressconsumerkey(uint8_t key);
 void releaseAllmousekeys();
 void releaseAllkeyboardkeys();
-#define _delay_after 0x03
-#define _delay_before 0x02
+#define _delay_after 0x08
+#define _delay_before 0x03
 
 uint8_t keymask[ROWS][COLS];
 uint8_t hexaKeys1[ROWS][COLS];
