@@ -10,8 +10,8 @@
 #include <avr/io.h>
 #include "usbdevice.h"
 
-#define ps2avrU
-//#define SJZZ
+//#define ps2avrU
+#define SJZZ
 #if defined(ps2avrU)
 #define ROWS  8
 #define COLS  10
@@ -45,7 +45,7 @@ void presssystemkey(uint8_t key);
 void pressconsumerkey(uint8_t key);
 void releaseAllmousekeys();
 void releaseAllkeyboardkeys();
-#define _delay_after 0x02
+#define _delay_after 0x03
 #define _delay_before 0x02
 
 uint8_t keymask[ROWS][COLS];
