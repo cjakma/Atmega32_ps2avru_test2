@@ -87,6 +87,9 @@ void LED(){
 		else{ digitalWrite(ledPins[i],LOW);}
 	}
 }
+uint8_t usb_macro_send(){
+	return 0;
+}
 /////////////////////////////////////////////////////////////////////
 uint8_t r,c;
 uint8_t delay_after=0;
@@ -105,6 +108,7 @@ void FaceUMode(){
 	}
 	releaseAllkeyboardkeys();
 	releaseAllmousekeys();
+	macrobuffer=0;
 	for (r = 0; r < ROWS; r++) {
 		for (c = 0; c < COLS; c++) {
 			switch(keymask[r][c]&FN){
@@ -123,6 +127,9 @@ void FaceUMode(){
 				case 0xD0:
 				pressconsumerkey(hexaKeys0[r][c]);
 				break;
+				case 0xF0:
+				pressmacrokey(hexaKeys0[r][c]);
+				break;
 				case 0x09:
 				presskey(hexaKeys1[r][c]);
 				break;
@@ -138,22 +145,28 @@ void FaceUMode(){
 				case 0x0D:
 				pressconsumerkey(hexaKeys1[r][c]);
 				break;
+				case 0x0F:
+				pressmacrokey(hexaKeys1[r][c]);
+				break;
 			}
 		}
 	}
+	if(usb_macro_send_required())delay_before=_delay_before;
 	if(usb_keyboard_send_required())delay_before=_delay_before;
 	if(usb_mouse_send_required())delay_before=_delay_before;
-	if(delay_after==_delay_after && delay_before==1){usb_keyboard_send();usb_mouse_send();}
-	if(delay_after==1){usb_keyboard_send();usb_mouse_send();}
-	if(delay_after>0)delay_after--;
-	if(delay_before>0)delay_before--;
+	if(delay_after==_delay_after && delay_before==1)
+	{usb_macro_send();usb_keyboard_send();usb_mouse_send();}
+	if(delay_after==1)
+	{usb_macro_send();usb_keyboard_send();usb_mouse_send();}
+	if(delay_after>0)delay_after-=1;
+	if(delay_before>0)delay_before-=1;
 }
 int init_main(void) {
 	usb_init();
 	////////////////////////////////////////////////
 	init_cols();
 	init_rows();
-	while (1) {		
+	while (1) {
 		init_LED();
 		keyboard_buffer.enable_pressing=1;
 		releaseAllkeyboardkeys();
@@ -163,17 +176,15 @@ int init_main(void) {
 		usb_keyboard_send();
 		while (1) {
 			usb_update();
-		    if(keyboard_buffer.enable_pressing==2){			
+			if(keyboard_buffer.enable_pressing==2){
 				break;
 			}
 			else if(keyboard_buffer.enable_pressing==1){
-				if (usbConfiguration && usbInterruptIsReady()){
 				FaceUMode();
-				LED();
-				}
+				if (usbConfiguration && usbInterruptIsReady()){LED();}
 			}
 		}
 	}
-return 0;
+	return 0;
 }
 #endif

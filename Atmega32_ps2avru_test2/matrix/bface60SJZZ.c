@@ -6,7 +6,7 @@
 //row B3 B4 B5 B6 B7
 //usbdrv D5
 //led D0 D1 D6
-//fullled  D4 
+//fullled  D4
 //RGB C1
 uint8_t i,FN;
 uint8_t rowPins[ROWS]={11,12,13,14,15};
@@ -25,16 +25,16 @@ void init_rows(){
 	PORTB=1;
 }
 void matrix_set_row_status(uint8_t row) {
-    row+=3;
+	row+=3;
 	DDRB = (1 << row);
 	PORTB = ~(1 << row);
 }
 uint8_t hexaKeys0[ROWS][COLS] = {
-  {MACRO2,KEY_1,KEY_2,KEY_3,KEY_4,KEY_5,KEY_6,KEY_7,KEY_8,KEY_9,KEY_0,KEY_MINUS,KEY_EQUAL,KEY_TILDE,KEY_BACKSPACE},
-  {KEY_TAB,KEY_Q,KEY_W,KEY_E,KEY_R,KEY_T,KEY_Y,KEY_U,KEY_I,KEY_O,KEY_P,KEY_LEFT_BRACE,KEY_RIGHT_BRACE,KEY_BACKSLASH,0x00},
-  {KEY_CAPS_LOCK,KEY_A,KEY_S,KEY_D,KEY_F,KEY_G,KEY_H,KEY_J,KEY_K,KEY_L,KEY_SEMICOLON,KEY_QUOTE,0x00,KEY_ENTER,0x00},
-  {KEY_LEFT_SHIFT,0x00,KEY_Z,KEY_X,KEY_C,KEY_V,KEY_B,KEY_N,KEY_M,KEY_COMMA,KEY_PERIOD,KEY_SLASH, KEY_RIGHT_SHIFT,KEY_UP,KEY_DELETE},
-  {KEY_LEFT_CTRL,KEY_FN,KEY_LEFT_ALT,0x00,0x00,0x00,0x00,KEY_SPACE,0x00,KEY_FN,KEY_RIGHT_ALT,KEY_LEFT,KEY_DOWN, KEY_RIGHT,0x00}
+	{MACRO2,KEY_1,KEY_2,KEY_3,KEY_4,KEY_5,KEY_6,KEY_7,KEY_8,KEY_9,KEY_0,KEY_MINUS,KEY_EQUAL,KEY_TILDE,KEY_BACKSPACE},
+	{KEY_TAB,KEY_Q,KEY_W,KEY_E,KEY_R,KEY_T,KEY_Y,KEY_U,KEY_I,KEY_O,KEY_P,KEY_LEFT_BRACE,KEY_RIGHT_BRACE,KEY_BACKSLASH,0x00},
+	{KEY_CAPS_LOCK,KEY_A,KEY_S,KEY_D,KEY_F,KEY_G,KEY_H,KEY_J,KEY_K,KEY_L,KEY_SEMICOLON,KEY_QUOTE,0x00,KEY_ENTER,0x00},
+	{KEY_LEFT_SHIFT,0x00,KEY_Z,KEY_X,KEY_C,KEY_V,KEY_B,KEY_N,KEY_M,KEY_COMMA,KEY_PERIOD,KEY_SLASH, KEY_RIGHT_SHIFT,KEY_UP,KEY_DELETE},
+	{KEY_LEFT_CTRL,KEY_FN,KEY_LEFT_ALT,0x00,0x00,0x00,0x00,KEY_SPACE,0x00,KEY_FN,KEY_RIGHT_ALT,KEY_LEFT,KEY_DOWN, KEY_RIGHT,0x00}
 };
 uint8_t hexaKeys1[ROWS][COLS] = {
 	{KEY_TILDE,KEY_F1,KEY_F2,KEY_F3,KEY_F4,KEY_F5,KEY_F6,KEY_F7,KEY_F8,KEY_F9,KEY_F10,KEY_F11,KEY_F12,0x00,KEY_DELETE},
@@ -65,6 +65,7 @@ void Close_LED(){
 	}
 }
 uint16_t delayval;
+uint8_t ledmacro=0;//¼ÇÂ¼led×´Ì¬
 void init_LED(){
 	for ( i=0; i<ledcount; i++){
 		pinMode(ledPins[i],OUTPUT);
@@ -72,10 +73,14 @@ void init_LED(){
 	}
 	pinMode(fullled,OUTPUT);
 	digitalWrite(fullled,HIGH);
-
-		WS2812Setup();delayval=Maxdelay;
-		WS2812Clear();
-		WS2812Send2();
+	ledmacro=0;
+	WS2812Setup();delayval=Maxdelay;
+	WS2812Clear();
+	WS2812Send2();
+}
+uint8_t usb_macro_send(){
+ledmacro^=macroreport;
+	return 0;
 }
 uint16_t cindex[WS2812_COUNT]={0,34,68,102,136,170,170,136,102,68,34,0};
 void LED(){
@@ -83,10 +88,10 @@ void LED(){
 		if((keyboard_buffer.keyboard_leds&(1<<i))==(1<<i)){ digitalWrite(ledPins[i],HIGH);}
 		else{ digitalWrite(ledPins[i],LOW);}
 	}
-	if((macroreport & (1<<0))==(1<<0)){digitalWrite(fullled,HIGH);}
+	if(ledmacro & (1<<0)){digitalWrite(fullled,HIGH);}
 	else{digitalWrite(fullled,LOW);}
 	if(delayval>=Maxdelay){
-		if((macroreport & (1<<1))==(1<<1)){
+		if(ledmacro & (1<<1)){
 			for(uint8_t i=0;i<WS2812_COUNT;i++){
 				uint8_t r=pgm_read_byte(Rcolors+cindex[i]);
 				uint8_t g=pgm_read_byte(Gcolors+cindex[i]);
@@ -123,6 +128,7 @@ void BfaceMod(){
 	}
 	releaseAllkeyboardkeys();
 	releaseAllmousekeys();
+	macrobuffer=0;
 	for (r = 0; r < ROWS; r++) {
 		for (c = 0; c < COLS; c++) {
 			switch(keymask[r][c]&FN){
@@ -144,7 +150,6 @@ void BfaceMod(){
 				case 0xF0:
 				pressmacrokey(hexaKeys0[r][c]);
 				break;
-				/////////////////////////////////////
 				case 0x09:
 				presskey(hexaKeys1[r][c]);
 				break;
@@ -166,9 +171,9 @@ void BfaceMod(){
 			}
 		}
 	}
+	if(usb_macro_send_required())delay_before=_delay_before;
 	if(usb_keyboard_send_required())delay_before=_delay_before;
 	if(usb_mouse_send_required())delay_before=_delay_before;
-	if(usb_macro_send_required())delay_before=_delay_before;
 	if(delay_after==_delay_after && delay_before==1)
 	{usb_macro_send();usb_keyboard_send();usb_mouse_send();}
 	if(delay_after==1)
@@ -177,7 +182,7 @@ void BfaceMod(){
 	if(delay_before>0)delay_before-=1;
 }
 int init_main(void) {
-//DDRD|=(1<<5);PORTD|=(1<<5);
+	//DDRD|=(1<<5);PORTD|=(1<<5);
 	usb_init();
 	////////////////////////////////////////////////
 	init_cols();
@@ -196,9 +201,9 @@ int init_main(void) {
 				break;
 			}
 			else if(keyboard_buffer.enable_pressing==1){
-				if (usbConfiguration && usbInterruptIsReady()){
 				BfaceMod();
-				LED();
+				if (usbConfiguration && usbInterruptIsReady()){
+					LED();
 				}
 			}
 		}
