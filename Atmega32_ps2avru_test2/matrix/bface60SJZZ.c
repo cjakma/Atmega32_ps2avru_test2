@@ -175,9 +175,9 @@ void BfaceMod(){
 	if(usb_keyboard_send_required())delay_before=_delay_before;
 	if(usb_mouse_send_required())delay_before=_delay_before;
 	if(delay_after==_delay_after && delay_before==1)
-	{usb_macro_send();usb_keyboard_send();usb_mouse_send();}
+	{usb_macro_send();usb_keyboard_send2();usb_mouse_send();}
 	if(delay_after==1)
-	{usb_macro_send();usb_keyboard_send();usb_mouse_send();}
+	{usb_macro_send();usb_keyboard_send2();usb_mouse_send();}
 	if(delay_after>0)delay_after-=1;
 	if(delay_before>0)delay_before-=1;
 }
@@ -202,7 +202,7 @@ int init_main(void) {
 			else if(keyboard_buffer.enable_pressing==1){
 				BfaceMod();
 				if (usbConfiguration && usbInterruptIsReady()){
-					LED();
+				if(delay_before==0)LED();	//LED耗时太长，所以按键的时候LED休眠	
 				}
 			}
 		}
