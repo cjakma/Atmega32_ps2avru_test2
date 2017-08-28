@@ -272,7 +272,7 @@ PROGMEM const char usbDescriptorConfiguration[] = {    /* USB configuration desc
     1,          /* index of this configuration */
     0,          /* configuration name string index */
     0xA0,
-    0xFA, /* max USB current in 2mA units */
+    USB_CFG_MAX_BUS_POWER, /* max USB current in 2mA units */
     //Interface Descriptor 0/0 HID, 1 Endpoint
     9,          /* sizeof(usbDescrInterface): length of descriptor in bytes */
     0x04, /* descriptor type */

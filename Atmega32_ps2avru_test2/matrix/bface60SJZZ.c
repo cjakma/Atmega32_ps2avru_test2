@@ -193,7 +193,7 @@ int init_main(void) {
 		releaseAllmousekeys();
 		ResetMatrixFormEEP();
 		_delay_ms(500);
-		usb_keyboard_send();
+		usb_keyboard_send2();
 		while (1) {
 			usb_update();
 			if(keyboard_buffer.enable_pressing==2){
