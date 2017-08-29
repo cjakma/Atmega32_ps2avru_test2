@@ -239,8 +239,8 @@ PROGMEM const int usbDescriptorStringSerialNumber[] = {
 PROGMEM const char usbDescriptorDevice[] = {    /* USB device descriptor */
  0x12,
  0x01,
- 0x10,0x01,//USB Version 0x0110
- 0x00,
+ 0x01,0x01,//USB Version 0x0101
+ 0x00,//bDeviceClass:Use class information in the Interface Descriptors
  0x00,
  0x00,
  ENDPOINT0_SIZE,
