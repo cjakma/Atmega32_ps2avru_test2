@@ -1,8 +1,27 @@
 #include "usbdevice.h"
-
+void clearTimers(void) {
+	// timer0, timer1 reset;
+	TIMSK&=~(1<<TOIE0);  // disable TCNT0 overflow
+	TIMSK&=~(1<<TOIE1);  // disable TCNT1 overflow
+	// timer2 reset
+	TIMSK&=~(1<<TOIE2);  // disable TCNT2 overflow
+}
+void setUsbOn(void) {
+	#ifndef DISABLED_TR_SWITCH
+	DDRD &= ~(1<<5);
+	PORTD |=  (1<<5);
+	#endif
+}
+void setUsbOff(void) {
+	#ifndef DISABLED_TR_SWITCH
+	DDRD  |= (1 << 5);
+	PORTD &= ~(1 << 5);
+	#endif
+}
 uint8_t vusb_idle_rate = 0;
 void usb_init(){
-//DDRD|=(1<<5);PORTD|=(1<<5);
+clearTimers();
+setUsbOn();
 uint8_t i = 0;
 	usbInit();
 	usbDeviceDisconnect();  
