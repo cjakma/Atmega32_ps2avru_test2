@@ -155,9 +155,9 @@ void FaceUMode(){
 	if(usb_keyboard_send_required())delay_before=_delay_before;
 	if(usb_mouse_send_required())delay_before=_delay_before;
 	if(delay_after==_delay_after && delay_before==1)
-	{usb_macro_send();usb_keyboard_send();usb_mouse_send();}
+	{usb_macro_send();usb_keyboard_send2();usb_mouse_send();}
 	if(delay_after==1)
-	{usb_macro_send();usb_keyboard_send();usb_mouse_send();}
+	{usb_macro_send();usb_keyboard_send2();usb_mouse_send();}
 	if(delay_after>0)delay_after-=1;
 	if(delay_before>0)delay_before-=1;
 }
@@ -173,7 +173,7 @@ int init_main(void) {
 		releaseAllmousekeys();
 		ResetMatrixFormEEP();
 		_delay_ms(500);
-		usb_keyboard_send();
+		usb_keyboard_send2();
 		while (1) {
 			usb_update();
 			if(keyboard_buffer.enable_pressing==2){

@@ -1,7 +1,4 @@
-
 #include "Functions.h"
-
-
 
 #define KBUF_SIZE 32
 static report_keyboard_t kbuf[KBUF_SIZE];
@@ -9,7 +6,7 @@ static uint8_t kbuf_head = 0;
 static uint8_t kbuf_tail = 0;
 static void vusb_transfer_keyboard()
 {
-	if (usbInterruptIsReady()) {
+	if (usbConfiguration && usbInterruptIsReady()) {
 		if (kbuf_head != kbuf_tail) {
 			usbSetInterrupt((void *)&kbuf[kbuf_tail], sizeof(report_keyboard_t));
 			kbuf_tail = (kbuf_tail + 1) % KBUF_SIZE;
@@ -27,19 +24,11 @@ static void send_keyboard(report_keyboard_t *report){
 }
 uint8_t usb_keyboard_send2(){
 	usbPoll();uint8_t send_required_t=0;
-	uint8_t i=0;
-	while(i<50){
-		if (usbConfiguration && usbInterruptIsReady() && keyboard_buffer.Send_Required) {
+		if(keyboard_buffer.Send_Required) {
 			keyboard_buffer.Send_Required=0;
 			send_keyboard(&keyboard_report);
-			send_required_t=1;
-			break;
+			send_required_t=1;	
 		}
-		else{
-			usbPoll(); vusb_transfer_keyboard();
-		}
-		i++;
-	}
 	return send_required_t;
 }
 uint8_t usb_mouse_send_required(){
@@ -124,7 +113,7 @@ uint8_t usb_keyboard_send(){
 	return 0;
 }
 void usb_update(){
-	usbPoll();
+usbPoll();
 #ifdef KBUF_SIZE
 vusb_transfer_keyboard();
 #endif
