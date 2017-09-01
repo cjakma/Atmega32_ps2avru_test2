@@ -23,7 +23,8 @@ static void send_keyboard(report_keyboard_t *report){
 	vusb_transfer_keyboard();
 }
 uint8_t usb_keyboard_send2(){
-	usbPoll();uint8_t send_required_t=0;
+	//usbPoll();
+	uint8_t send_required_t=0;
 		if(keyboard_buffer.Send_Required) {
 			keyboard_buffer.Send_Required=0;
 			send_keyboard(&keyboard_report);
