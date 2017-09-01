@@ -252,7 +252,7 @@ PROGMEM const int usbDescriptorStringSerialNumber[] = {
 PROGMEM const char usbDescriptorDevice[] = {    /* USB device descriptor */
  0x12,
  0x01,
- 0x01,0x01,//USB Version 0x0101
+ 0x10,0x01,//USB Version 0x0110
  0x00,//bDeviceClass:Use class information in the Interface Descriptors
  0x00,
  0x00,
@@ -310,7 +310,7 @@ PROGMEM const char usbDescriptorConfiguration[] = {    /* USB configuration desc
     0x80+KEYBOARD_ENDPOINT, /* IN endpoint number 1 */
     0x03,       /* attrib: Interrupt endpoint */
     KEYBOARD_SIZE,0x00,       /* maximum packet size */
-    0x0A, /* in ms */
+    0x01, /* in ms */
     
     //Interface Descriptor 1/0 HID, 1 Endpoints
     0x09,
@@ -336,7 +336,7 @@ PROGMEM const char usbDescriptorConfiguration[] = {    /* USB configuration desc
     0x80+MOUSE_ENDPOINT, /* IN endpoint number 1 */
     0x03,       /* attrib: Interrupt endpoint */
     MOUSE_SIZE,0x00,       /* maximum packet size */
-    0x0A, /* in ms */
+    0x01, /* in ms */
     //Interface Descriptor 1/0 HID, 2 Endpoints
     0x09,
     0x04,
