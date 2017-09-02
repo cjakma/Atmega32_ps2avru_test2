@@ -8,6 +8,8 @@ main.c
 
 matrix\bface60SJZZ.c
 
+matrix\minila.c
+
 matrix\ps2avrU.c
 
 usbdevice.c

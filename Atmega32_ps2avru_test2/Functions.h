@@ -12,15 +12,20 @@
 
 //#define ps2avrU
 #define SJZZ
+//#define  minila`
+
 #if defined(ps2avrU)
 #define ROWS  8
 #define COLS  10
 #elif defined(SJZZ)
 #define ROWS  5
 #define COLS  15
+#elif defined(minila)
+#define ROWS  8
+#define COLS  15
 #else
 #define ROWS  8
-#define COLS  10
+#define COLS  15
 #endif
 #define LOW 0
 #define HIGH 1

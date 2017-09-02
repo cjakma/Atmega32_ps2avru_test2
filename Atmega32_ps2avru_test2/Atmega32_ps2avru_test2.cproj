@@ -104,7 +104,7 @@
   <avrgcc.compiler.symbols.DefSymbols>
     <ListValues>
       <Value>DEBUG</Value>
-      <Value>F_CPU=12000000L</Value>
+      <Value>F_CPU=16000000L</Value>
     </ListValues>
   </avrgcc.compiler.symbols.DefSymbols>
   <avrgcc.compiler.directories.IncludePaths>
@@ -142,6 +142,9 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="matrix\bface60SJZZ.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="matrix\minila.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="matrix\ps2avrU.c">
