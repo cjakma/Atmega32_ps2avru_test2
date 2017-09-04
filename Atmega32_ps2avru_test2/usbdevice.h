@@ -274,6 +274,9 @@ void usb_init();
 void ClearKeyboard();
 void ClearMouse();
 void ClearRaw();			
-
+uint16_t suspendedTimeCount;
+uint8_t suspended;
+void initSOF();
+void SOF();
 extern const  uint8_t  ascii_to_scan_code_table[] PROGMEM;
 #endif

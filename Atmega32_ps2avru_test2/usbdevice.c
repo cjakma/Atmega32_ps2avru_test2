@@ -91,7 +91,20 @@ uchar usbFunctionWrite(uchar *data, uchar len)
 	}
 	return -1;
 }
-
+void initSOF(){
+ suspendedTimeCount=0;
+ suspended=0;
+}
+void SOF(){
+#if USB_COUNT_SOF
+if (usbSofCount != 0) {
+	suspended = 0;usbSofCount = 0;suspendedTimeCount=0;
+}
+else{
+	if (suspendedTimeCount>1000) {suspended = 1;}else{suspendedTimeCount++;}
+}
+#endif
+}
 ////////////////////////////////////////////////////////////////////////////////
 const uint8_t ascii_to_scan_code_table[] PROGMEM = {
 	0,0,0,0,0,0,0,0,

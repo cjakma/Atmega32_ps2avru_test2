@@ -10,8 +10,8 @@
 #include <avr/io.h>
 #include "usbdevice.h"
 
-#define ps2avrU
-//#define SJZZ
+//#define ps2avrU
+#define SJZZ
 //#define  minila`
 
 #if defined(ps2avrU)
@@ -77,4 +77,5 @@ void ResetMatrix(uint8_t mask,uint16_t address);
 void ResetMatrixFormEEP();
 void FaceUMode();
 void BfaceMod();
+
 #endif /* FUNCTIONS_H_ */
