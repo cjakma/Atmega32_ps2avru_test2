@@ -126,13 +126,15 @@ const PROGMEM uint8_t  RawReport[] =
 	0x06, 0x31 ,0xFF,//Usage Page (Vendor-Defined 50 31FF)
 	0x09 ,0x74,//Usage (Vendor-Defined 116)
 	0xA1, 0x01,//Collection (Application)
+	/*
 	0x09 ,0x75,//Usage (Vendor-Defined 117)
 	0x15 ,0x00,//Logical Minimum (0)
 	0x26, 0xFF ,0x00,//Logical Maximum (255 FF00)
 	0x95 ,0x08 ,//Report Count (8)
 	0x75 ,0x08 ,//Report Size (8)
 	0x81 ,0x02 ,//Input (Data,Var,Abs,NWrp,Lin,Pref,NNul,Bit)
-	0x09 ,0x76 ,//Usage (Vendor-Defined 118)
+	*/
+	0x09 ,0x75 ,//Usage (Vendor-Defined 117)
 	0x15, 0x00 ,//Logical Minimum (0)
 	0x26 ,0xFF ,0x00 ,//Logical Maximum (255)
 	0x95 ,0x08 , //Report Count (8)
@@ -267,8 +269,8 @@ PROGMEM const char usbDescriptorDevice[] = {    /* USB device descriptor */
 PROGMEM const char usbDescriptorConfiguration[] = {    /* USB configuration descriptor */
     9,
     0x02,
-    9+9+9+7+9+9+7+9+9+7+7,0x00, //9+(9+9+7)+(9+9+7+7)
-    0x03,          /* number of interfaces in this configuration */
+    9+9+9+7+9+9+7+9+9+7,0x00, //9+(9+9+7)+(9+9+7+7)
+	0x03,          /* number of interfaces in this configuration */
     1,          /* index of this configuration */
     0,          /* configuration name string index */
     0xA0,
@@ -326,33 +328,27 @@ PROGMEM const char usbDescriptorConfiguration[] = {    /* USB configuration desc
     0x01, /* in ms */
     //Interface Descriptor 1/0 HID, 2 Endpoints
     0x09,
-    0x04,
+    0x04,	//Interface Descriptor
     RAW_INTERFACE, //interface number
     0x00,
-    0x02,
+    0x01, //ep number
     0x03,
-    0x00,
-    0x00,
-    0x00,
+    0x00, //InterfaceClass 
+    0x00, //Interface subClass 
+    0x00,  //String Descriptor  
     //HID descriptor
     0x09,
     0x21,
-    0x11, 0x01,
+    0x11, 0x01, //HID Version 1.11
     0x00,
     0x01,
     0x22,
     sizeof(RawReport),0x00,
     //endpoint descriptor for endpoint 2
-    0x07,          /* sizeof(usbDescrEndpoint) */
-    0x05,  /* descriptor type = endpoint */
-    0x80+RAW_ENDPOINT_IN, /* IN endpoint number 1 */
-    0x03,       /* attrib: Interrupt endpoint */
-    RAW_EPSIZE,0x00,       /* maximum packet size */
-    0x01, /* in ms */
     //endpoint descriptor for endpoint 3
     0x07,          /* sizeof(usbDescrEndpoint) */
     0x05,  /* descriptor type = endpoint */
-    RAW_ENDPOINT_OUT, /* IN endpoint number 1 */
+    0x03+0x00, // ep3 Direction=OUT  EndpointID=2
     0x03,       /* attrib: Interrupt endpoint */
     RAW_EPSIZE,0x00,       /* maximum packet size */
     0x01 /* in ms */

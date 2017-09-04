@@ -4,6 +4,8 @@
 static report_keyboard_t kbuf[KBUF_SIZE];
 static uint8_t kbuf_head = 0;
 static uint8_t kbuf_tail = 0;
+uint8_t i1=0;
+uint8_t i2=0;
  void vusb_transfer_keyboard()
 {
 	if (usbConfiguration && usbInterruptIsReady()) {
@@ -73,8 +75,6 @@ uint8_t usb_keyboard_send_required(){
 	if(send_required_t)keyboard_buffer.Send_Required=send_required_t;
 	return send_required_t;
 }
-uint8_t i1=0;
-uint8_t i2=0;
 uint8_t usb_mouse_send(){
 	if(mouse_buffer.Send_Required==0)return 0;
 	i1=0;
