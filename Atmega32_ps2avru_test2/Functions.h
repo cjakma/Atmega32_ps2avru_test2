@@ -10,8 +10,8 @@
 #include <avr/io.h>
 #include "usbdevice.h"
 
-//#define ps2avrU
-#define SJZZ
+#define ps2avrU
+//#define SJZZ
 //#define  minila`
 
 #if defined(ps2avrU)
@@ -27,6 +27,7 @@
 #define ROWS  8
 #define COLS  15
 #endif
+
 #define LOW 0
 #define HIGH 1
 #define INPUT 0
@@ -43,7 +44,7 @@ uint8_t usb_keyboard_send2();
 uint8_t usb_mouse_send();
 uint8_t usb_keyboard_send_required();
 uint8_t usb_mouse_send_required();
-
+ void vusb_transfer_keyboard();
 void pressModifierKeys(uint8_t key);
 uint8_t presskey(uint8_t key);
 void pressmousekey(uint8_t key);

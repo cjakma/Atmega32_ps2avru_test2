@@ -4,7 +4,7 @@
 static report_keyboard_t kbuf[KBUF_SIZE];
 static uint8_t kbuf_head = 0;
 static uint8_t kbuf_tail = 0;
-static void vusb_transfer_keyboard()
+ void vusb_transfer_keyboard()
 {
 	if (usbConfiguration && usbInterruptIsReady()) {
 		if (kbuf_head != kbuf_tail) {

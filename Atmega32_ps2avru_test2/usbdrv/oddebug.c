@@ -11,7 +11,9 @@
 
 #if DEBUG_LEVEL > 0
 
+#warning "======================================================="
 #warning "Never compile production devices with debugging enabled"
+#warning "======================================================="
 
 static void uartPutc(char c)
 {
@@ -41,6 +43,7 @@ void    odDebug(uchar prefix, uchar *data, uchar len)
     while(len--){
         uartPutc(' ');
         printHex(*data++);
+        // uartPutc(*data++);
     }
     uartPutc('\r');
     uartPutc('\n');
