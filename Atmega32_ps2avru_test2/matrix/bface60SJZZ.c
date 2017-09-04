@@ -187,6 +187,7 @@ int init_main(void) {
 	init_cols();
 	init_rows();
 	while (1) {
+	initSOF();
 		init_LED();
 		keyboard_buffer.enable_pressing=1;
 		releaseAllkeyboardkeys();
@@ -195,14 +196,15 @@ int init_main(void) {
 		_delay_ms(500);
 		usb_keyboard_send2();
 		while (1) {
-			usb_update();
+		SOF();
+			usbPoll();
 			if(keyboard_buffer.enable_pressing==2){
 				break;
 			}
 			else if(keyboard_buffer.enable_pressing==1){
-				BfaceMod();
+				if( suspended==0){	BfaceMod();vusb_transfer_keyboard();}
 				if (usbConfiguration && usbInterruptIsReady()){
-				if(delay_before==0)LED();	//LED耗时太长，所以按键的时候LED休眠	
+					if(delay_before==0)LED();	//LED耗时太长，所以按键的时候LED休眠
 				}
 			}
 		}

@@ -180,12 +180,11 @@ int init_main(void) {
 				if(keyboard_buffer.enable_pressing==2){
 					break;
 				}
-				else if(keyboard_buffer.enable_pressing==1 && suspended==0){
-					FaceUMode();
+				else if(keyboard_buffer.enable_pressing==1){
+				if( suspended==0){	FaceUMode();vusb_transfer_keyboard();}
 					if (usbConfiguration && usbInterruptIsReady()){
 						if(delay_before==0)LED();	//LED耗时太长，所以按键的时候LED休眠
-					}
-					vusb_transfer_keyboard();
+					}			
 				}
 		}
 	}
