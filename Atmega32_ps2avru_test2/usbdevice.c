@@ -91,7 +91,7 @@ uchar usbFunctionWrite(uchar *data, uchar len)
 	}
 	return -1;
 }
-void initSOF(){
+void init_SOF(){
  suspendedTimeCount=0;
  suspended=0;
 }

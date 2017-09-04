@@ -187,7 +187,7 @@ int init_main(void) {
 	init_cols();
 	init_rows();
 	while (1) {
-		initSOF();
+		init_SOF();//sof·ÀÖ¹¹ÒÆð
 		init_LED();
 		keyboard_buffer.enable_pressing=1;
 		releaseAllkeyboardkeys();

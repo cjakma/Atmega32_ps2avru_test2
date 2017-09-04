@@ -10,9 +10,9 @@
 #include <avr/io.h>
 #include "usbdevice.h"
 
-#define ps2avrU
-//#define SJZZ
-//#define  minila`
+//#define ps2avrU
+#define SJZZ
+//#define minila
 
 #if defined(ps2avrU)
 #define ROWS  8

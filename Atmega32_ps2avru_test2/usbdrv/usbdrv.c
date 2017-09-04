@@ -269,8 +269,13 @@ PROGMEM const char usbDescriptorDevice[] = {    /* USB device descriptor */
 PROGMEM const char usbDescriptorConfiguration[] = {    /* USB configuration descriptor */
     9,
     0x02,
-    9+9+9+7+9+9+7+9+9+7,0x00, //9+(9+9+7)+(9+9+7+7)
-	0x03,          /* number of interfaces in this configuration */
+  #if USB_CFG_IMPLEMENT_FN_WRITEOUT
+  9+9+9+7+9+9+7+9+9+7,0x00, //9+(9+9+7)+(9+9+7+7)
+  0x03,          /* number of interfaces in this configuration */
+  #else
+  9+9+9+7+9+9+7,0x00, //9+(9+9+7)+(9+9+7+7)
+  0x02,          /* number of interfaces in this configuration */
+  #endif
     1,          /* index of this configuration */
     0,          /* configuration name string index */
     0xA0,
@@ -299,7 +304,7 @@ PROGMEM const char usbDescriptorConfiguration[] = {    /* USB configuration desc
     0x80+KEYBOARD_ENDPOINT, /* IN endpoint number 1 */
     0x03,       /* attrib: Interrupt endpoint */
     KEYBOARD_SIZE,0x00,       /* maximum packet size */
-    0x01, /* in ms */
+    10, /* in ms */
     
     //Interface Descriptor 1/0 HID, 1 Endpoints
     0x09,
@@ -325,8 +330,9 @@ PROGMEM const char usbDescriptorConfiguration[] = {    /* USB configuration desc
     0x80+MOUSE_ENDPOINT, /* IN endpoint number 1 */
     0x03,       /* attrib: Interrupt endpoint */
     MOUSE_SIZE,0x00,       /* maximum packet size */
-    0x01, /* in ms */
+    10, /* in ms */
     //Interface Descriptor 1/0 HID, 2 Endpoints
+	#if USB_CFG_IMPLEMENT_FN_WRITEOUT
     0x09,
     0x04,	//Interface Descriptor
     RAW_INTERFACE, //interface number
@@ -351,7 +357,8 @@ PROGMEM const char usbDescriptorConfiguration[] = {    /* USB configuration desc
     0x03+0x00, // ep3 Direction=OUT  EndpointID=2
     0x03,       /* attrib: Interrupt endpoint */
     RAW_EPSIZE,0x00,       /* maximum packet size */
-    0x01 /* in ms */
+    10 /* in ms */
+	#endif
 };
 #endif
 USB_PUBLIC usbMsgLen_t usbFunctionDescriptor(struct usbRequest *rq)
@@ -378,10 +385,12 @@ USB_PUBLIC usbMsgLen_t usbFunctionDescriptor(struct usbRequest *rq)
 			usbMsgPtr =(unsigned char *)(usbDescriptorConfiguration+9+9+9+7+9);
 			len    =9;
 			break;
+			#if USB_CFG_IMPLEMENT_FN_WRITEOUT
 			case RAW_INTERFACE:
 			usbMsgPtr =(unsigned char *)( usbDescriptorConfiguration+9+9+9+7+9+9+7+9);
 			len    = 9;
 			break;
+			#endif
 		}
 		break;
 		case USBDESCR_HID_REPORT:
@@ -395,10 +404,12 @@ USB_PUBLIC usbMsgLen_t usbFunctionDescriptor(struct usbRequest *rq)
 			usbMsgPtr = (uchar *) &MouseReport;
 			len    = sizeof(MouseReport);
 			break;
+			#if USB_CFG_IMPLEMENT_FN_WRITEOUT
 			case RAW_INTERFACE:
 			usbMsgPtr = (uchar *)&RawReport;
 			len    = sizeof(RawReport);
 			break;
+			#endif
 		}
 		break;
 	}

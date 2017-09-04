@@ -22,8 +22,6 @@
 #define MOUSE_SIZE		8
 
 #define RAW_INTERFACE	 MOUSE_INTERFACE+1
-#define RAW_ENDPOINT_IN	 MOUSE_ENDPOINT+1
-#define RAW_ENDPOINT_OUT MOUSE_ENDPOINT+2
 #define RAW_EPSIZE  8
 
 extern const PROGMEM uint8_t KeyboardReport[];
@@ -276,7 +274,7 @@ void ClearMouse();
 void ClearRaw();			
 uint16_t suspendedTimeCount;
 uint8_t suspended;
-void initSOF();
+void init_SOF();
 void SOF();
 extern const  uint8_t  ascii_to_scan_code_table[] PROGMEM;
 #endif
