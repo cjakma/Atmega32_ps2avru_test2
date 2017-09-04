@@ -175,17 +175,17 @@ int init_main(void) {
 		_delay_ms(500);
 		usb_keyboard_send2();
 		while (1) {
-				usbPoll();
-				SOF();
-				if(keyboard_buffer.enable_pressing==2){
-					break;
-				}
-				else if(keyboard_buffer.enable_pressing==1){
+			usbPoll();
+			SOF();
+			if(keyboard_buffer.enable_pressing==2){
+				break;
+			}
+			else if(keyboard_buffer.enable_pressing==1){
 				if( suspended==0){	FaceUMode();vusb_transfer_keyboard();}
-					if (usbConfiguration && usbInterruptIsReady()){
-						if(delay_before==0)LED();	//LED耗时太长，所以按键的时候LED休眠
-					}			
+				if (usbConfiguration && usbInterruptIsReady()){
+					if(delay_before==0)LED();	//LED耗时太长，所以按键的时候LED休眠
 				}
+			}
 		}
 	}
 	return 0;

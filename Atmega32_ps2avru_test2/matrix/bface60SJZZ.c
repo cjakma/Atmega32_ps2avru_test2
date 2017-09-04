@@ -79,7 +79,7 @@ void init_LED(){
 	WS2812Send2();
 }
 uint8_t usb_macro_send(){
-ledmacro^=macroreport;
+	ledmacro^=macroreport;
 	return 0;
 }
 uint16_t cindex[WS2812_COUNT]={0,34,68,102,136,170,170,136,102,68,34,0};
@@ -181,13 +181,13 @@ void BfaceMod(){
 	if(delay_after>0)delay_after-=1;
 	if(delay_before>0)delay_before-=1;
 }
-int init_main(void) {	
+int init_main(void) {
 	usb_init();
 	////////////////////////////////////////////////
 	init_cols();
 	init_rows();
 	while (1) {
-	initSOF();
+		initSOF();
 		init_LED();
 		keyboard_buffer.enable_pressing=1;
 		releaseAllkeyboardkeys();
@@ -195,9 +195,9 @@ int init_main(void) {
 		ResetMatrixFormEEP();
 		_delay_ms(500);
 		usb_keyboard_send2();
-		while (1) {
-		SOF();
+		while (1) {		
 			usbPoll();
+			SOF();
 			if(keyboard_buffer.enable_pressing==2){
 				break;
 			}
