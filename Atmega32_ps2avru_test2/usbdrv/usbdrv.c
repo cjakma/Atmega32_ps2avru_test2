@@ -304,7 +304,7 @@ PROGMEM const char usbDescriptorConfiguration[] = {    /* USB configuration desc
     0x80+KEYBOARD_ENDPOINT, /* IN endpoint number 1 */
     0x03,       /* attrib: Interrupt endpoint */
     KEYBOARD_SIZE,0x00,       /* maximum packet size */
-    10, /* in ms */
+    USB_CFG_INTR_POLL_INTERVAL, /* in ms */
     
     //Interface Descriptor 1/0 HID, 1 Endpoints
     0x09,
@@ -330,7 +330,7 @@ PROGMEM const char usbDescriptorConfiguration[] = {    /* USB configuration desc
     0x80+MOUSE_ENDPOINT, /* IN endpoint number 1 */
     0x03,       /* attrib: Interrupt endpoint */
     MOUSE_SIZE,0x00,       /* maximum packet size */
-    10, /* in ms */
+    USB_CFG_INTR_POLL_INTERVAL, /* in ms */
     //Interface Descriptor 1/0 HID, 2 Endpoints
 	#if USB_CFG_IMPLEMENT_FN_WRITEOUT
     0x09,
@@ -357,7 +357,7 @@ PROGMEM const char usbDescriptorConfiguration[] = {    /* USB configuration desc
     0x03+0x00, // ep3 Direction=OUT  EndpointID=2
     0x03,       /* attrib: Interrupt endpoint */
     RAW_EPSIZE,0x00,       /* maximum packet size */
-    10 /* in ms */
+    USB_CFG_INTR_POLL_INTERVAL /* in ms */
 	#endif
 };
 #endif
