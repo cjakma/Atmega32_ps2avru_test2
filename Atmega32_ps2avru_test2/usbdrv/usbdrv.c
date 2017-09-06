@@ -126,7 +126,7 @@ const PROGMEM uint8_t  RawReport[] =
 	0x06, 0x31 ,0xFF,//Usage Page (Vendor-Defined 50 31FF)
 	0x09 ,0x74,//Usage (Vendor-Defined 116)
 	0xA1, 0x01,//Collection (Application)
-	/*
+	/* 
 	0x09 ,0x75,//Usage (Vendor-Defined 117)
 	0x15 ,0x00,//Logical Minimum (0)
 	0x26, 0xFF ,0x00,//Logical Maximum (255 FF00)
@@ -134,7 +134,7 @@ const PROGMEM uint8_t  RawReport[] =
 	0x75 ,0x08 ,//Report Size (8)
 	0x81 ,0x02 ,//Input (Data,Var,Abs,NWrp,Lin,Pref,NNul,Bit)
 	*/
-	0x09 ,0x75 ,//Usage (Vendor-Defined 117)
+	0x09 ,0x75 ,//Usage (Vendor-Defined 117)不能和上面的重复
 	0x15, 0x00 ,//Logical Minimum (0)
 	0x26 ,0xFF ,0x00 ,//Logical Maximum (255)
 	0x95 ,0x08 , //Report Count (8)
