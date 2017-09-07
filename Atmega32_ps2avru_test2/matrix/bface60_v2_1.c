@@ -1,6 +1,6 @@
 #include "../Functions.h"
 #include "../ws2812.h"
-#ifdef SJZZ
+#ifdef bface60_v2_1
 //ps2avrGB rev_SJZZ
 //col A0,A1,A2,A3,A4 A5 A6 A7 C7 C6 C5 C4 C3 C2 D7
 //row B3 B4 B5 B6 B7
@@ -14,6 +14,11 @@ uint8_t colPins[COLS]={0,1,2,3,4,5,6,7,23,22,21,20,19,18,31};
 #define ledcount 3
 #define fullled 28
 uint8_t ledPins[ledcount]={24,25,30};
+uint16_t delayval;
+uint8_t ledmacro=0;//记录led状态
+uint8_t r,c;
+uint8_t delay_after=0;//backswing 后摇
+uint8_t delay_before=0;//windup 前摇
 void init_cols(){
 	for ( i=0; i<COLS; i++){
 		pinMode(colPins[i],INPUT);
@@ -64,8 +69,7 @@ void Close_LED(){
 		digitalWrite(ledPins[i],LOW);
 	}
 }
-uint16_t delayval;
-uint8_t ledmacro=0;//记录led状态
+
 void init_LED(){
 	for ( i=0; i<ledcount; i++){
 		pinMode(ledPins[i],OUTPUT);
@@ -111,9 +115,7 @@ void LED(){
 	}
 }
 /////////////////////////////////////////////////////////////////////
-uint8_t r,c;
-uint8_t delay_after=0;//backswing 后摇
-uint8_t delay_before=0;//windup 前摇
+
 void BfaceMod(){
 	FN=0xF0;
 	for (r = 0; r < ROWS; r++) {
@@ -187,7 +189,6 @@ int init_main(void) {
 	init_cols();
 	init_rows();
 	while (1) {
-		init_SOF();//sof防止挂起
 		init_LED();
 		keyboard_buffer.enable_pressing=1;
 		releaseAllkeyboardkeys();
@@ -195,14 +196,13 @@ int init_main(void) {
 		ResetMatrixFormEEP();
 		_delay_ms(500);
 		usb_keyboard_send2();
-		while (1) {		
-			usbPoll();
-			SOF();
+		while (1) {
+			usb_update();
 			if(keyboard_buffer.enable_pressing==2){
 				break;
 			}
 			else if(keyboard_buffer.enable_pressing==1){
-				if( suspended==0){	BfaceMod();vusb_transfer_keyboard();}
+				BfaceMod();
 				if (usbConfiguration && usbInterruptIsReady()){
 					if(delay_before==0)LED();	//LED耗时太长，所以按键的时候LED休眠
 				}

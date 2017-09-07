@@ -13,6 +13,9 @@ uint8_t colPins[COLS]={1,2,3,4,5,6,7,23,22,21};
 //                     2 3 4 5 6 7 8  9  10 11
 #define ledcount 3
 uint8_t ledPins[ledcount]={24,25,28};
+uint8_t r,c;
+uint8_t delay_after=0;
+uint8_t delay_before=0;
 
 void init_cols(){
 	for ( i=0; i<COLS; i++){
@@ -49,7 +52,7 @@ uint8_t hexaKeys1[ROWS][COLS] = {
 	{KEY_F1,KEY_F2,KEY_F3,KEY_F4,KEY_F7,KEY_F8,KEY_F9,KEY_F10,0x00,0x00},//ROW7
 };
 //keymask_bits:7-press 654-hexatype0 3-press 210-hexatype1
-//type: 1-key 2-modifykey 3-mousekey 4-systemkey 5-consumerkey 6-FN 7-Switch,8-macro
+//type: 1-key 2-modifykey 3-mousekey 4-systemkey 5-consumerkey 6-FN 7-macro
 uint8_t keymask[ROWS][COLS]={
 	{0x10,0x11,0x10,0x10,0x10,0x10,0x10,0x10,0x22,0x66},//ROW0
 	{0x11,0x11,0x00,0x10,0x10,0x10,0x10,0x10,0x22,0x00},//ROW1
@@ -57,7 +60,7 @@ uint8_t keymask[ROWS][COLS]={
 	{0x00,0x00,0x00,0x10,0x10,0x00,0x00,0x10,0x22,0x11},//ROW3
 	{0x11,0x11,0x11,0x11,0x10,0x15,0x15,0x00,0x22,0x11},//ROW4
 	{0x00,0x00,0x00,0x10,0x10,0x00,0x66,0x10,0x22,0x00},//ROW5
-	{0x11,0x00,0x00,0x11,0x11,0x11,0x00,0x11,0x66,0x11},//ROW6
+	{0x71,0x00,0x00,0x11,0x11,0x11,0x00,0x11,0x66,0x11},//ROW6
 	{0x11,0x11,0x11,0x11,0x11,0x11,0x11,0x11,0x00,0x00},//ROW7
 };
 /////////////////////////////////////////////////////////////////////
@@ -89,9 +92,7 @@ uint8_t usb_macro_send(){
 	return 0;
 }
 /////////////////////////////////////////////////////////////////////
-uint8_t r,c;
-uint8_t delay_after=0;
-uint8_t delay_before=0;
+
 void FaceUMode(){
 	FN=0xF0;
 	for (r = 0; r < ROWS; r++) {
@@ -176,7 +177,7 @@ int init_main(void) {
 		usb_keyboard_send2();
 		while (1) {
 			usbPoll();
-			SOF();
+			SOF();//¹ÒÆðÌØÐÔ
 			if(keyboard_buffer.enable_pressing==2){
 				break;
 			}

@@ -10,14 +10,14 @@
 #include <avr/io.h>
 #include "usbdevice.h"
 
-#define ps2avrU
-//#define SJZZ
+//#define ps2avrU
+#define bface60_v2_1
 //#define minila
 
 #if defined(ps2avrU)
 #define ROWS  8
 #define COLS  10
-#elif defined(SJZZ)
+#elif defined(bface60_v2_1)
 #define ROWS  5
 #define COLS  15
 #elif defined(minila)
