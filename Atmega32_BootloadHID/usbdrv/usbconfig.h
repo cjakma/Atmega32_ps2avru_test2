@@ -26,7 +26,7 @@ the newest features and options.
  */
 #include "bootloaderconfig.h"
 
-//#define USB_PUBLIC static
+#define USB_PUBLIC static
 /* Use the define above if you #include usbdrv.c instead of linking against it.
  * This technique saves a couple of bytes in flash memory.
  */

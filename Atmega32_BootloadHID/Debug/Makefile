@@ -38,7 +38,7 @@ SUBDIRS :=  \
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS +=  \
-../main.c \
+../usbdrv/main.c \
 ../usbdrv/oddebug.c \
 ../usbdrv/usbdrv.c
 
@@ -51,25 +51,25 @@ ASM_SRCS +=
 
 
 OBJS +=  \
-main.o \
+usbdrv/main.o \
 usbdrv/oddebug.o \
 usbdrv/usbdrv.o \
 usbdrv/usbdrvasm.o
 
 OBJS_AS_ARGS +=  \
-main.o \
+usbdrv/main.o \
 usbdrv/oddebug.o \
 usbdrv/usbdrv.o \
 usbdrv/usbdrvasm.o
 
 C_DEPS +=  \
-main.d \
+usbdrv/main.d \
 usbdrv/oddebug.d \
 usbdrv/usbdrv.d \
 usbdrv/usbdrvasm.d
 
 C_DEPS_AS_ARGS +=  \
-main.d \
+usbdrv/main.d \
 usbdrv/oddebug.d \
 usbdrv/usbdrv.d \
 usbdrv/usbdrvasm.d
@@ -94,13 +94,6 @@ LINKER_SCRIPT_DEP+=
 
 
 
-
-./%.o: .././%.c
-	@echo Building file: $<
-	@echo Invoking: AVR/GNU C Compiler : 5.4.0
-	$(QUOTE)D:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG -DF_CPU=16000000L  -I"D:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.132\include"  -Os -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega32a -B "D:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.132\gcc\dev\atmega32a" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
-	@echo Finished building: $<
-	
 
 usbdrv/%.o: ../usbdrv/%.c
 	@echo Building file: $<

@@ -18,8 +18,8 @@
 
 static void leaveBootloader() __attribute__((__noreturn__));
 
-#include "usbdrv/usbdrv.h"
-#include "usbdrv/oddebug.h"
+#include "bootloaderconfig.h"
+#include "usbdrv.c"
 
 /* ------------------------------------------------------------------------ */
 
@@ -215,7 +215,7 @@ uchar   i = 0;
     sei();
 }
 
-int main(void)
+int __attribute__((noreturn)) main(void)
 {
     /* initialize hardware */
     bootLoaderInit();
@@ -230,7 +230,7 @@ int main(void)
 #endif
         initForUsbConnectivity();
         do{ /* main event loop */
-            wdt_reset(;)
+            wdt_reset();
             usbPoll();
 #if BOOTLOADER_CAN_EXIT
             if(exitMainloop){
