@@ -15,10 +15,10 @@
 #     make lock    # to protect the boot loader from overwriting
 
 DEVICE = atmega32
-BOOTLOADER_ADDRESS = 3800
+BOOTLOADER_ADDRESS = 0x7000
 F_CPU = 16000000
-FUSEH = 0xd0
-FUSEL = 0x0f
+FUSEH = 0xD0
+FUSEL = 0x0F
 # Fuse high byte:
 # 0xc0 = 1 1 0 0   0 0 0 0 <-- BOOTRST (boot reset vector at 0x1800)
 #        ^ ^ ^ ^   ^ ^ ^------ BOOTSZ0

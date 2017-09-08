@@ -43,7 +43,9 @@ these macros are defined, the boot loader usees them.
 /* This is the port where the USB bus is connected. When you configure it to
  * "B", the registers PORTB, PINB and DDRB will be used.
  */
-#define USB_CFG_DMINUS_BIT      3
+//#define USB_CFG_DMINUS_BIT      0
+#define USB_CFG_DMINUS_BIT      3           // for ps2avr bootloader
+
 /* This is the bit number in USB_CFG_IOPORT where the USB D- line is connected.
  * This may be any bit in the port.
  */
@@ -56,7 +58,7 @@ these macros are defined, the boot loader usees them.
  * interrupt, the USB interrupt will also be triggered at Start-Of-Frame
  * markers every millisecond.]
  */
-#define USB_CFG_CLOCK_KHZ      16000
+#define USB_CFG_CLOCK_KHZ       (F_CPU/1000)
 /* Clock rate of the AVR in MHz. Legal values are 12000, 12800, 15000, 16000,
  * 16500 and 20000. The 12.8 MHz and 16.5 MHz versions of the code require no
  * crystal, they tolerate +/- 1% deviation from the nominal frequency. All
@@ -105,18 +107,69 @@ these macros are defined, the boot loader usees them.
 
 #ifndef __ASSEMBLER__   /* assembler cannot parse function definitions */
 #include <util/delay.h>
-#include <avr/io.h>
+
+
+uint8_t ledcounter = 0; ///< counter used to set the speed of the running light
+uint8_t ledstate = 0;   ///< state of the running light
+
+static uint8_t isBootloader = 0;
+static int counter=0;
+static int prevState;
 
 static inline void  bootLoaderInit(void)
 {
+    // switch on leds
+    DDRD  |= ((1 << PIND0) | (1 << PIND1) | (1 << PIND6));
+    PORTD |= ((1 << PIND0) | (1 << PIND1) | (1 << PIND6));
+    // choose matrix position for hotkey. we use KEY_KPminus, so we set row 13
+    // and later look for pin 7
+	
+	
     DDRA&=~(1<<1);
     PORTA|=(1<<1);
     DDRB  |= (1 << 4);
     PORTB &=~(1 << 4);
-    _delay_us(10);  /* wait for levels to stabilize */
 }
 
-#define bootLoaderCondition()   ((PINA & (1 << 1)) == 0)   /* True if jumper is set */
+//#define bootLoaderCondition()   ((PIND & (1 << 3)) == 0)   /* True if jumper is set */
+static inline uint8_t bootLoaderCondition() {
+	prevState = PINA & (1 << 1);
+	while(counter<=10) {                            // PINA0 should be 0 for 10 cycles
+		if(prevState != (PINA & (1 << 1)))
+			counter=0;
+		else
+			counter++;
+
+		prevState = (PINA & (1 << 1));
+	}
+	if(!prevState) isBootloader = 1;
+
+    if (isBootloader) {
+        // boot loader active, blink leds
+        _delay_ms(1);
+        ledcounter++;
+        if (ledcounter == 127) {
+            switch (ledstate) {
+                case 0:
+                    PORTD &= ~((1 << PIND0) | (1 << PIND1) | (1 << PIND6));
+                    ledstate = 1;
+                    break;
+                case 1:
+                    PORTD |= ((1 << PIND0) | (1 << PIND1) | (1 << PIND6));
+                    ledstate = 2;
+                    break;
+                default:
+                    ledstate = 0;
+            }
+            ledcounter = 0;
+        }
+        return 1;
+    } else {
+        // no boot loader
+        return 0;
+    }
+}
+
 
 #endif
 
