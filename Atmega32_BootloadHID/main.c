@@ -19,7 +19,7 @@
 static void leaveBootloader() __attribute__((__noreturn__));
 
 #include "usbdrv/usbdrv.h"
-
+#include "usbdrv/oddebug.h"
 
 /* ------------------------------------------------------------------------ */
 
@@ -230,7 +230,7 @@ int main(void)
 #endif
         initForUsbConnectivity();
         do{ /* main event loop */
-            wdt_reset();
+            wdt_reset(;)
             usbPoll();
 #if BOOTLOADER_CAN_EXIT
             if(exitMainloop){

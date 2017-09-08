@@ -8,7 +8,7 @@
  */
 
 #include "usbdrv.h"
-
+#include "oddebug.h"
 
 /*
 General Description:
@@ -45,10 +45,10 @@ uchar       usbCurrentDataToken;/* when we check data toggling to ignore duplica
 /* USB status registers / not shared with asm code */
 usbMsgPtr_t         usbMsgPtr;      /* data to transmit next -- ROM or RAM address */
 static usbMsgLen_t  usbMsgLen = USB_NO_MSG; /* remaining number of bytes */
-static uchar        usbMsgFlags;    /* flag values see below */
-
-#define USB_FLG_MSGPTR_IS_ROM   (1<<6)
-#define USB_FLG_USE_USER_RW     (1<<7)
+uchar        usbMsgFlags;    /* flag values see below */
+//
+//#define USB_FLG_MSGPTR_IS_ROM   (1<<6)
+//#define USB_FLG_USE_USER_RW     (1<<7)
 
 /*
 optimizing hints:
@@ -218,6 +218,7 @@ static inline void  usbResetStall(void)
 #if USB_CFG_HAVE_INTRIN_ENDPOINT
 static void usbGenericSetInterrupt(uchar *data, uchar len, usbTxStatus_t *txStatus)
 {
+
 uchar   *p;
 char    i;
 
@@ -238,6 +239,7 @@ char    i;
     usbCrc16Append(&txStatus->buffer[1], len);
     txStatus->len = len + 4;    /* len must be given including sync byte */
     DBG2(0x21 + (((int)txStatus >> 3) & 3), txStatus->buffer, len + 3);
+
 }
 
 USB_PUBLIC void usbSetInterrupt(uchar *data, uchar len)
@@ -313,6 +315,10 @@ uchar       flags = USB_FLG_MSGPTR_IS_ROM;
 
     SWITCH_START(rq->wValue.bytes[1])
     SWITCH_CASE(USBDESCR_DEVICE)    /* 1 */
+
+        // disable TCNT1 overflow
+        TIMSK &= ~(1 << TOIE1); //cbi(TIMSK, TOIE1);
+
         GET_DESCRIPTOR(USB_CFG_DESCR_PROPS_DEVICE, usbDescriptorDevice)
     SWITCH_CASE(USBDESCR_CONFIG)    /* 2 */
         GET_DESCRIPTOR(USB_CFG_DESCR_PROPS_CONFIGURATION, usbDescriptorConfiguration)
@@ -342,6 +348,10 @@ uchar       flags = USB_FLG_MSGPTR_IS_ROM;
         GET_DESCRIPTOR(USB_CFG_DESCR_PROPS_HID, usbDescriptorConfiguration + 18)
     SWITCH_CASE(USBDESCR_HID_REPORT)/* 0x22 */
         GET_DESCRIPTOR(USB_CFG_DESCR_PROPS_HID_REPORT, usbDescriptorHidReport)
+
+        // enable TCNT1 overflow
+//        TIMSK |= (1 << TOIE1);  //sbi(TIMSK, TOIE1);
+//        TIMSK = timskStore;
 #endif
     SWITCH_DEFAULT
         if(USB_CFG_DESCR_PROPS_UNKNOWN & USB_PROP_IS_DYNAMIC){
@@ -427,7 +437,7 @@ usbRequest_t    *rq = (void *)data;
  * 0xe1 11100001 (USBPID_OUT: data phase of setup transfer)
  * 0...0x0f for OUT on endpoint X
  */
-    DBG2(0x10 + (usbRxToken & 0xf), data, len + 2); /* SETUP=1d, SETUP-DATA=11, OUTx=1x */
+//    DBG1(0x10 + (usbRxToken & 0xf), data, len + 2); /* SETUP=1d, SETUP-DATA=11, OUTx=1x */
     USB_RX_USER_HOOK(data, len)
 #if USB_CFG_IMPLEMENT_FN_WRITEOUT
     if(usbRxToken < 0x10){  /* OUT to endpoint != 0: endpoint number in usbRxToken */
@@ -459,6 +469,7 @@ usbRequest_t    *rq = (void *)data;
                 }
             }
             usbMsgFlags = USB_FLG_USE_USER_RW;
+//            DBG1(0x77, (uchar *)&usbMsgFlags, 1);
         }else   /* The 'else' prevents that we limit a replyLen of USB_NO_MSG to the maximum transfer len. */
 #endif
         if(sizeof(replyLen) < sizeof(rq->wLength.word)){ /* help compiler with optimizing */
@@ -473,6 +484,7 @@ usbRequest_t    *rq = (void *)data;
 #if USB_CFG_IMPLEMENT_FN_WRITE
         if(usbMsgFlags & USB_FLG_USE_USER_RW){
             uchar rval = usbFunctionWrite(data, len);
+//        	DBG1(0xBB, (void *)&rval, 1);
             if(rval == 0xff){   /* an error occurred */
                 usbTxLen = USBPID_STALL;
             }else if(rval != 0){    /* This was the final package */
@@ -559,7 +571,7 @@ uchar           isReset = !notResetState;
         wasReset = isReset;
     }
 #else
-    notResetState = notResetState;  // avoid compiler warning
+//    notResetState = notResetState;  // avoid compiler warning
 #endif
 }
 
@@ -567,6 +579,7 @@ uchar           isReset = !notResetState;
 
 USB_PUBLIC void usbPoll(void)
 {
+
 schar   len;
 uchar   i;
 
@@ -591,8 +604,9 @@ uchar   i;
             usbBuildTxBlock();
         }
     }
+
     for(i = 20; i > 0; i--){
-        uchar usbLineStatus = USBIN & USBMASK;
+        uchar usbLineStatus = USBIN & USBMASK;  // USBIN = PIND, USBMASK = 0b110
         if(usbLineStatus != 0)  /* SE0 has ended */
             goto isNotReset;
     }
@@ -603,6 +617,7 @@ uchar   i;
     DBG1(0xff, 0, 0);
 isNotReset:
     usbHandleResetHook(i);
+
 }
 
 /* ------------------------------------------------------------------------- */
