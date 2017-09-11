@@ -13,7 +13,14 @@ uint8_t rowPins[ROWS]={8,9,10,11,12,13,14,15};
 uint8_t colPins[COLS]={0,1,2,3,4,5,6,7,23,22,21,20,19,18,31};
 #define ledcount 3
 #define fullled 28
+uint16_t delayval;
+uint8_t ledmacro=0;//¼ÇÂ¼led×´Ì¬
 uint8_t ledPins[ledcount]={24,25,30};
+uint8_t r,c;
+uint8_t delay_after=0;//backswing ºóÒ¡
+uint8_t delay_before=0;//windup Ç°Ò¡
+uint16_t cindex[WS2812_COUNT]=
+{0,34,68,102,136,170,204,238,238,204,170,136,102,68,34,0};
 void init_cols(){
 	for ( i=0; i<COLS; i++){
 		pinMode(colPins[i],INPUT);
@@ -25,8 +32,15 @@ void init_rows(){
 	PORTB=1;
 }
 void matrix_set_row_status(uint8_t row) {
-	DDRB = (1 << row);
-	PORTB = ~(1 << row);
+	DDRB |= (1 << row);
+	PORTB &= ~(1 << row);
+	//_delay_us(5);//Ì«¿ì»á´Ü¼ü
+	for ( i=0; i<ledcount; i++){
+		if((keyboard_buffer.keyboard_leds&(1<<i))==(1<<i)){ digitalWrite(ledPins[i],HIGH);}
+		else{ digitalWrite(ledPins[i],LOW);}
+	}
+	if((ledmacro & (1<<0))||(keyboard_buffer.keyboard_leds&(1<<0)))
+	{digitalWrite(fullled,HIGH);}else{digitalWrite(fullled,LOW);}
 }
 uint8_t hexaKeys0[ROWS][COLS] = {
 	{KEY_CTRL,KEY_GUI,KEY_ALT,KEY_FN,0x00,0x00,0x00,0x00,0x00,0x00,KEY_RIGHT_GUI,KEY_FN,KEY_RIGHT_CTRL,0x00,0x00},//r1
@@ -34,7 +48,7 @@ uint8_t hexaKeys0[ROWS][COLS] = {
 	{KEY_CAPS,KEY_A,KEY_S,KEY_D,KEY_F,KEY_G,0x00,0x00,0x00,0x00,KEY_SEMICOLON,KEY_QUOTE,0x00,KEY_ENTER,0x00},//r3
 	{KEY_TAB,KEY_Q,KEY_W,KEY_E,KEY_R,KEY_T,0x00,0x00,0x00,0x00,KEY_P,KEY_LEFT_BRACE,KEY_RIGHT_BRACE,KEY_BACKSLASH,0x00},//r4
 	{KEY_TILDE,KEY_1,KEY_2,KEY_3,KEY_4,KEY_5,0x00,0x00,0x00,0x00,KEY_0,KEY_MINUS,KEY_EQUAL,KEY_TILDE,KEY_BACKSPACE},//r5
-	{KEY_ESC,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00},//r6
+	{0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00},//r6
 	{0x00,KEY_6,KEY_Y,KEY_H,KEY_N,KEY_SPACE,KEY_LEFT,KEY_DOWN,KEY_UP,KEY_RIGHT,0x00,KEY_7,KEY_U,KEY_J,KEY_M},//r7
 	{0x00,KEY_9,KEY_O,KEY_L,KEY_PERIOD,KEY_RIGHT_ALT,0x00,0x00,0x00,0x00,0x00,KEY_8,KEY_I,KEY_K,KEY_COMMA} //r8
 };
@@ -56,7 +70,7 @@ uint8_t keymask[ROWS][COLS] = {
 	{0x10,0x10,0x10,0x10,0x10,0x10,0x00,0x00,0x00,0x00,0x10,0x10,0x00,0x10,0x00},//r3
 	{0x10,0x10,0x10,0x10,0x10,0x10,0x00,0x00,0x00,0x00,0x10,0x10,0x10,0x10,0x00},//r4
 	{0x11,0x11,0x11,0x11,0x11,0x11,0x00,0x00,0x00,0x00,0x11,0x11,0x11,0x10,0x11},//r5
-	{0x10,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00},//r6
+	{0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00},//r6
 	{0x00,0x11,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x00,0x11,0x10,0x10,0x10},//r7
 	{0x00,0x11,0x10,0x10,0x10,0x20,0x00,0x00,0x00,0x00,0x00,0x11,0x10,0x10,0x10} //r8
 };
@@ -72,8 +86,7 @@ void Close_LED(){
 		digitalWrite(ledPins[i],LOW);
 	}
 }
-uint16_t delayval;
-uint8_t ledmacro=0;//¼ÇÂ¼led×´Ì¬
+
 void init_LED(){
 	for ( i=0; i<ledcount; i++){
 		pinMode(ledPins[i],OUTPUT);
@@ -90,15 +103,8 @@ uint8_t usb_macro_send(){
 	ledmacro^=macroreport;
 	return 0;
 }
-uint16_t cindex[WS2812_COUNT]=
-{0,34,68,102,136,170,204,238,238,204,170,136,102,68,34,0};
-void LED(){
-	for ( i=0; i<ledcount; i++){
-		if((keyboard_buffer.keyboard_leds&(1<<i))==(1<<i)){ digitalWrite(ledPins[i],HIGH);}
-		else{ digitalWrite(ledPins[i],LOW);}
-	}
-	if((ledmacro & (1<<0))||(keyboard_buffer.keyboard_leds&(1<<1)))
-	{digitalWrite(fullled,HIGH);}else{digitalWrite(fullled,LOW);}
+
+void LED(){	
 	if(delayval>=Maxdelay){
 		if((ledmacro & (1<<1))||(keyboard_buffer.keyboard_leds&(1<<2))){
 			for(uint8_t i=0;i<WS2812_COUNT;i++){
@@ -120,9 +126,7 @@ void LED(){
 	}
 }
 /////////////////////////////////////////////////////////////////////
-uint8_t r,c;
-uint8_t delay_after=0;//backswing ºóÒ¡
-uint8_t delay_before=0;//windup Ç°Ò¡
+
 void BfaceMod(){
 	FN=0xF0;
 	for (r = 0; r < ROWS; r++) {
@@ -199,7 +203,7 @@ int init_main(void) {
 		keyboard_buffer.enable_pressing=1;
 		releaseAllkeyboardkeys();
 		releaseAllmousekeys();
-		ResetMatrixFormEEP();
+		//ResetMatrixFormEEP();
 		_delay_ms(500);
 		usb_keyboard_send2();
 		while (1) {
