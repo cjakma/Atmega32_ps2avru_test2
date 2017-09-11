@@ -10,8 +10,8 @@
 #include <avr/io.h>
 #include "usbdevice.h"
 
-//#define ps2avrU
-#define bface60_v2_1
+#define ps2avrU
+//#define bface60_v2_1
 //#define minila
 
 #if defined(ps2avrU)
