@@ -5,12 +5,16 @@
 #include <stdlib.h>
 #include "avr/pgmspace.h"
 
-#define WS2812_COUNT	16
+#define WS2812_COUNT	12
 #define WS2812_PORT		PORTC
 #define WS2812_DDR		DDRC
 #define WS2812_MASK		(1<<1)
 #define WS2812_SAVE		1			/*Power saver, divide light level with this.*/
+<<<<<<< HEAD
 #define Maxdelay 0x0100
+=======
+#define Maxdelay 0x0200
+>>>>>>> parent of ba74b50... update
 
 #define nop() __asm__ __volatile__ ("nop")
 //ƒ⁄«∂ª„±‡÷∏¡Ónop —” ± 0.25us
