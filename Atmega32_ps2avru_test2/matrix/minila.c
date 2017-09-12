@@ -8,6 +8,8 @@
 //led D0 D1 D6
 //fullled  D4
 //RGB C1
+
+//rgb没电容滤波 D1 D4和D5窜键了
 uint8_t i,FN;
 uint8_t rowPins[ROWS]={8,9,10,11,12,13,14,15};
 uint8_t colPins[COLS]={0,1,2,3,4,5,6,7,23,22,21,20,19,18,31};
@@ -35,11 +37,8 @@ void matrix_set_row_status(uint8_t row) {
 	DDRB |= (1 << row);
 	PORTB &= ~(1 << row);
 	//_delay_us(5);//太快会窜键
-	for ( i=0; i<ledcount; i++){
-		if((keyboard_buffer.keyboard_leds&(1<<i))==(1<<i)){ digitalWrite(ledPins[i],HIGH);}
-		else{ digitalWrite(ledPins[i],LOW);}
-	}
-	if((ledmacro & (1<<0))||(keyboard_buffer.keyboard_leds&(1<<0)))
+	
+	if(ledmacro & (1<<0))
 	{digitalWrite(fullled,HIGH);}else{digitalWrite(fullled,LOW);}
 }
 uint8_t hexaKeys0[ROWS][COLS] = {
@@ -105,6 +104,12 @@ uint8_t usb_macro_send(){
 }
 
 void LED(){	
+/*
+for ( i=0; i<ledcount; i++){
+	if((keyboard_buffer.keyboard_leds&(1<<i))==(1<<i)){ digitalWrite(ledPins[i],HIGH);}
+	else{ digitalWrite(ledPins[i],LOW);}
+}
+*/
 	if(delayval>=Maxdelay){
 		if((ledmacro & (1<<1))||(keyboard_buffer.keyboard_leds&(1<<2))){
 			for(uint8_t i=0;i<WS2812_COUNT;i++){
