@@ -34,13 +34,7 @@ void init_rows(){
 void matrix_set_row_status(uint8_t row) {
 	DDRB |= (1 << row);
 	PORTB &= ~(1 << row);
-	//_delay_us(5);//太快会窜键
-	for ( i=0; i<ledcount; i++){
-		if((keyboard_buffer.keyboard_leds&(1<<i))==(1<<i)){ digitalWrite(ledPins[i],HIGH);}
-		else{ digitalWrite(ledPins[i],LOW);}
-	}
-	if((ledmacro & (1<<0))||(keyboard_buffer.keyboard_leds&(1<<0)))
-	{digitalWrite(fullled,HIGH);}else{digitalWrite(fullled,LOW);}
+	_delay_us(5);//太快会窜键
 }
 uint8_t hexaKeys0[ROWS][COLS] = {
 	{KEY_CTRL,KEY_GUI,KEY_ALT,KEY_FN,0x00,0x00,0x00,0x00,0x00,0x00,KEY_RIGHT_GUI,KEY_FN,KEY_RIGHT_CTRL,0x00,0x00},//r1
@@ -104,7 +98,13 @@ uint8_t usb_macro_send(){
 	return 0;
 }
 
-void LED(){	
+void LED(){
+	for ( i=0; i<ledcount; i++){
+		if((keyboard_buffer.keyboard_leds&(1<<i))==(1<<i)){ digitalWrite(ledPins[i],HIGH);}
+		else{ digitalWrite(ledPins[i],LOW);}
+	}
+	if((ledmacro & (1<<0))||(keyboard_buffer.keyboard_leds&(1<<0)))
+	{digitalWrite(fullled,HIGH);}else{digitalWrite(fullled,LOW);}
 	if(delayval>=Maxdelay){
 		if((ledmacro & (1<<1))||(keyboard_buffer.keyboard_leds&(1<<2))){
 			for(uint8_t i=0;i<WS2812_COUNT;i++){
@@ -130,7 +130,8 @@ void LED(){
 void BfaceMod(){
 	FN=0xF0;
 	for (r = 0; r < ROWS; r++) {
-		matrix_set_row_status(r);
+		pinMode(rowPins[r],OUTPUT);
+		digitalWrite(rowPins[r],LOW);
 		for (c = 0; c < COLS; c++) {
 			if (digitalRead(colPins[c])) {keymask[r][c]&= ~0x88;}
 			else {keymask[r][c]|= 0x88;delay_after=_delay_after;}
@@ -203,7 +204,7 @@ int init_main(void) {
 		keyboard_buffer.enable_pressing=1;
 		releaseAllkeyboardkeys();
 		releaseAllmousekeys();
-		//ResetMatrixFormEEP();
+		ResetMatrixFormEEP();
 		_delay_ms(500);
 		usb_keyboard_send2();
 		while (1) {
