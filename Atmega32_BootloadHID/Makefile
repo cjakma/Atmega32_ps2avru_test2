@@ -13,12 +13,12 @@
 #     make fuse    # to set the clock generator, boot section size etc.
 #     make flash   # to load the boot loader into flash
 #     make lock    # to protect the boot loader from overwriting
-
-DEVICE = atmega32
-BOOTLOADER_ADDRESS = 0x7000
-F_CPU = 16000000
-FUSEH = 0xD0
-FUSEL = 0x0F
+#address在fuse bootsz里面有显示 这里是byte 如果单位是word 需要*2
+DEVICE = atmega644pa
+BOOTLOADER_ADDRESS = 0xF000
+F_CPU = 20000000
+FUSEH = 0xD2
+FUSEL = 0xCF
 # Fuse high byte:
 # 0xc0 = 1 1 0 0   0 0 0 0 <-- BOOTRST (boot reset vector at 0x1800)
 #        ^ ^ ^ ^   ^ ^ ^------ BOOTSZ0
