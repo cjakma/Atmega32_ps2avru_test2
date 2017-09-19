@@ -217,7 +217,7 @@ int init_main1(void) {
 				break;
 			}
 			else if(keyboard_buffer.enable_pressing==1){
-				//BfaceMod();
+				BfaceMod();
 				if (usbConfiguration && usbInterruptIsReady()){
 					if(delay_before==0)LED();	//LED耗时太长，所以按键的时候LED休眠
 				}
@@ -227,9 +227,14 @@ int init_main1(void) {
 	return 0;
 }
 int init_main(void) {
-init_LED();
-while (1) {
-LED();
-}
+pinMode(fullled,OUTPUT);
+digitalWrite(fullled,HIGH);
+	while (1) {
+	digitalWrite(fullled,HIGH);
+	_delay_ms(1000);
+	digitalWrite(fullled,LOW);
+	_delay_ms(1000);
+	}
+
 }
 #endif
