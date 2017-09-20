@@ -258,6 +258,7 @@ void usbFunctionWriteOut(uchar *data, uchar len){
 		}
 	}
 }
+#ifdef _AVR_ATMEGA32A_H_INCLUDED
 void pinMode(uint8_t IO,uint8_t value){
 	switch(IO){
 		case 0: if(value){DDRA|= (1<<0);}else{DDRA &= ~(1<<0);}break;
@@ -378,6 +379,7 @@ uint8_t digitalRead(uint8_t IO){
 	}
 	return value;
 }
+#endif
 ////////////////////////print//////////////////////
 void pressmacrokey(uint8_t key){
 	if(key==MACRO2){

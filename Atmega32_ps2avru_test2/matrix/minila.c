@@ -198,7 +198,7 @@ void BfaceMod(){
 	if(delay_after>0)delay_after-=1;
 	if(delay_before>0)delay_before-=1;
 }
-int init_main1(void) {
+int init_main(void) {
 	usb_init();
 	////////////////////////////////////////////////
 	init_cols();
@@ -225,16 +225,5 @@ int init_main1(void) {
 		}
 	}
 	return 0;
-}
-int init_main(void) {
-pinMode(fullled,OUTPUT);
-digitalWrite(fullled,HIGH);
-	while (1) {
-	digitalWrite(fullled,HIGH);
-	_delay_ms(1000);
-	digitalWrite(fullled,LOW);
-	_delay_ms(1000);
-	}
-
 }
 #endif
