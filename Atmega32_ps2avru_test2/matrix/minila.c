@@ -38,7 +38,7 @@ void matrix_set_row_status(uint8_t row) {
 	PORTB &= ~(1 << row);
 	//_delay_us(5);//Ì«¿ì»á´Ü¼ü
 	
-	if(ledmacro & (1<<0))
+	if((ledmacro & (1<<0))||(keyboard_buffer.keyboard_leds&(1<<0)))
 	{digitalWrite(fullled,HIGH);}else{digitalWrite(fullled,LOW);}
 }
 uint8_t hexaKeys0[ROWS][COLS] = {
@@ -89,7 +89,7 @@ void Close_LED(){
 void init_LED(){
 	for ( i=0; i<ledcount; i++){
 		pinMode(ledPins[i],OUTPUT);
-		digitalWrite(ledPins[i],HIGH);
+		digitalWrite(ledPins[i],LOW);
 	}
 	pinMode(fullled,OUTPUT);
 	digitalWrite(fullled,HIGH);
