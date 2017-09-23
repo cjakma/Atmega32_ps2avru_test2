@@ -9,15 +9,15 @@
 //fullled  D4
 //RGB C1
 
-//rgb没电容滤波 D1 D4和D5窜键了
 uint8_t i,FN;
 uint8_t rowPins[ROWS]={8,9,10,11,12,13,14,15};
 uint8_t colPins[COLS]={0,1,2,3,4,5,6,7,23,22,21,20,19,18,31};
 #define ledcount 3
+uint8_t ledPins[ledcount]={24,25,30};
 #define fullled 28
+#define ledcaps 25
 uint16_t delayval;
 uint8_t ledmacro=0;//记录led状态
-uint8_t ledPins[ledcount]={24,25,30};
 uint8_t r,c;
 uint8_t delay_after=0;//backswing 后摇
 uint8_t delay_before=0;//windup 前摇
@@ -75,22 +75,15 @@ uint8_t keymask[ROWS][COLS] = {
 };
 /////////////////////////////////////////////////////////////////////
 void Open_LED(){
-	for ( i=0; i<ledcount; i++){
-		digitalWrite(ledPins[i],HIGH);
-	}
+		digitalWrite(ledcaps,HIGH);
 }
 void Close_LED(){
-
-	for ( i=0; i<ledcount; i++){
-		digitalWrite(ledPins[i],LOW);
-	}
+		digitalWrite(ledcaps,LOW);
 }
 
 void init_LED(){
-	for ( i=0; i<ledcount; i++){
-		pinMode(ledPins[i],OUTPUT);
-		digitalWrite(ledPins[i],LOW);
-	}
+	pinMode(ledcaps,OUTPUT);
+	digitalWrite(ledcaps,LOW);
 	pinMode(fullled,OUTPUT);
 	digitalWrite(fullled,HIGH);
 	ledmacro=0;
@@ -104,12 +97,10 @@ uint8_t usb_macro_send(){
 }
 
 void LED(){	
-/*
-for ( i=0; i<ledcount; i++){
-	if((keyboard_buffer.keyboard_leds&(1<<i))==(1<<i)){ digitalWrite(ledPins[i],HIGH);}
-	else{ digitalWrite(ledPins[i],LOW);}
-}
-*/
+///*
+	if((keyboard_buffer.keyboard_leds&(1<<1))==(1<<1)){ digitalWrite(ledcaps,HIGH);}
+	else{ digitalWrite(ledcaps,LOW);}
+//*/
 	if(delayval>=Maxdelay){
 		if((ledmacro & (1<<1))||(keyboard_buffer.keyboard_leds&(1<<2))){
 			for(uint8_t i=0;i<WS2812_COUNT;i++){
@@ -208,7 +199,7 @@ int init_main(void) {
 		keyboard_buffer.enable_pressing=1;
 		releaseAllkeyboardkeys();
 		releaseAllmousekeys();
-		//ResetMatrixFormEEP();
+		ResetMatrixFormEEP();
 		_delay_ms(500);
 		usb_keyboard_send2();
 		while (1) {
