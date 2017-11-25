@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include "avr/pgmspace.h"
 
-#define WS2812_COUNT	16
+#define WS2812_COUNT	20
 #define WS2812_PORT		PORTC
 #define WS2812_DDR		DDRC
 #define WS2812_MASK		(1<<1)

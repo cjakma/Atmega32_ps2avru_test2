@@ -22,7 +22,7 @@ uint8_t r,c;
 uint8_t delay_after=0;//backswing บ๓าก
 uint8_t delay_before=0;//windup วฐาก
 uint16_t cindex[WS2812_COUNT]=
-{0,34,68,102,136,170,204,238,238,204,170,136,102,68,34,0};
+{25,50,75,100,125,150,175,200,225,250,225,200,175,150,125,100,75,50,25,0};
 void init_cols(){
 	for ( i=0; i<COLS; i++){
 		pinMode(colPins[i],INPUT);
