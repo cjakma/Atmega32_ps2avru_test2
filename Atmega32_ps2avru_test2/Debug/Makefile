@@ -42,7 +42,7 @@ C_SRCS +=  \
 ../Functions.c \
 ../main.c \
 ../matrix/bface60_v2_1.c \
-../matrix/minila.c \
+../matrix/minila_b96.c \
 ../matrix/ps2avrU.c \
 ../usbdevice.c \
 ../usbdrv/oddebug.c \
@@ -61,7 +61,7 @@ OBJS +=  \
 Functions.o \
 main.o \
 matrix/bface60_v2_1.o \
-matrix/minila.o \
+matrix/minila_b96.o \
 matrix/ps2avrU.o \
 usbdevice.o \
 usbdrv/oddebug.o \
@@ -73,7 +73,7 @@ OBJS_AS_ARGS +=  \
 Functions.o \
 main.o \
 matrix/bface60_v2_1.o \
-matrix/minila.o \
+matrix/minila_b96.o \
 matrix/ps2avrU.o \
 usbdevice.o \
 usbdrv/oddebug.o \
@@ -85,7 +85,7 @@ C_DEPS +=  \
 Functions.d \
 main.d \
 matrix/bface60_v2_1.d \
-matrix/minila.d \
+matrix/minila_b96.d \
 matrix/ps2avrU.d \
 usbdevice.d \
 usbdrv/oddebug.d \
@@ -97,7 +97,7 @@ C_DEPS_AS_ARGS +=  \
 Functions.d \
 main.d \
 matrix/bface60_v2_1.d \
-matrix/minila.d \
+matrix/minila_b96.d \
 matrix/ps2avrU.d \
 usbdevice.d \
 usbdrv/oddebug.d \

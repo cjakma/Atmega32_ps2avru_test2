@@ -8,7 +8,7 @@ main.c
 
 matrix\bface60_v2_1.c
 
-matrix\minila.c
+matrix\minila_b96.c
 
 matrix\ps2avrU.c
 

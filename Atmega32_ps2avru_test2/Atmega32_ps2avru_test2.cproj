@@ -144,7 +144,7 @@
     <Compile Include="matrix\bface60_v2_1.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="matrix\minila.c">
+    <Compile Include="matrix\minila_b96.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="matrix\ps2avrU.c">

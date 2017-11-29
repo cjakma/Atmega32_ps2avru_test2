@@ -1,9 +1,3 @@
-/*
- * Functions.h
- *
- * Created: 2017/5/2 22:26:44
- *  Author: Administrator
- */ 
 #ifndef FUNCTIONS_H_
 #define FUNCTIONS_H_
 
@@ -11,23 +5,33 @@
 #include "usbdevice.h"
 
 //#define ps2avrU
-//#define bface60_v2_1
-#define minila
+#define bface60_v2_1
+//#define minila
 
 #if defined(ps2avrU)
 #define ROWS  8
 #define COLS  10
+#define WS2812_COUNT	0
 #elif defined(bface60_v2_1)
 #define ROWS  5
 #define COLS  15
+#define WS2812_COUNT	12
 #elif defined(minila)
 #define ROWS  8
 #define COLS  15
+#define WS2812_COUNT	20
 #else
 #define ROWS  8
 #define COLS  15
+#define WS2812_COUNT	0
 #endif
-
+//ws2812
+#define WS2812_PORT		PORTC
+#define WS2812_DDR		DDRC
+#define WS2812_MASK		(1<<1)
+#define WS2812_SAVE		1
+#define Maxdelay 0x0400
+////////
 #define LOW 0
 #define HIGH 1
 #define INPUT 0
@@ -69,13 +73,17 @@ void init_LED();
 void LED();
 
 #define add1 10
-#define add2 add1+ROWS
-#define add3 add2+COLS
-#define add4 add3+(ROWS*COLS)
-#define add5 add4+(ROWS*COLS)
+#define add2 add1+ROWS //15
+#define add3 add2+COLS //30
+#define add4 add3+(ROWS*COLS) //30+15*5=105
+#define add5 add4+(ROWS*COLS) //105+75=180
+#define addRGB add5+(ROWS*COLS) //180+75=255
+#define addPrint addRGB+(WS2812_COUNT*3) //255+12*3=291
+uint8_t WS2812fix[(WS2812_COUNT * 3)];
 void ResetMatrix(uint8_t mask,uint16_t address);
 void ResetMatrixFormEEP();
 void FaceUMode();
 void BfaceMod();
 
+void keyPrintWordEEP(uint16_t address_t);
 #endif /* FUNCTIONS_H_ */

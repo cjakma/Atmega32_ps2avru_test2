@@ -84,6 +84,10 @@ void init_LED(){
 }
 uint8_t usb_macro_send(){
 	ledmacro^=macroreport;
+	if(macroreport&MACRO3){
+		keyPrintWordEEP(addPrint);
+		return 1;
+	}
 	return 0;
 }
 uint16_t cindex[WS2812_COUNT]={0,34,68,102,136,170,170,136,102,68,34,0};
@@ -100,6 +104,7 @@ void LED(){
 				uint8_t r=pgm_read_byte(Rcolors+cindex[i]);
 				uint8_t g=pgm_read_byte(Gcolors+cindex[i]);
 				uint8_t b=pgm_read_byte(Bcolors+cindex[i]);
+				//这个过程耗时太长
 				WS2812SetRGB(i,r,g,b);
 				cindex[i]++;
 				if(cindex[i]>=WS2812ColorCount) cindex[i]=0;
