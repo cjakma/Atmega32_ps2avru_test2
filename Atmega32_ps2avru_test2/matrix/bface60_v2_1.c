@@ -77,15 +77,15 @@ void init_LED(){
 	}
 	pinMode(fullled,OUTPUT);
 	digitalWrite(fullled,LOW);
-	ledmacro=0;
+	ledmacro=0;if((RGB_Type&0xF0)==0x10)ledmacro=0x02;
 	WS2812Setup();delayval=Maxdelay;
 	WS2812Clear();
-	WS2812Send2();
+	WS2812Send2();	
 }
 uint8_t usb_macro_send(){
 	ledmacro^=macroreport;
 	if(macroreport&MACRO3){
-		keyPrintWordEEP(addPrint);
+		keyPrintWordEEP(addPrint+6);
 		return 1;
 	}
 	return 0;
@@ -101,24 +101,23 @@ void LED(){
 	if(delayval>=Maxdelay){
 		if(ledmacro & (1<<1)){
 			for(uint8_t i=0;i<WS2812_COUNT;i++){
-				uint8_t r=pgm_read_byte(Rcolors+cindex[i]);
-				uint8_t g=pgm_read_byte(Gcolors+cindex[i]);
-				uint8_t b=pgm_read_byte(Bcolors+cindex[i]);
-				//这个过程耗时太长
-				WS2812SetRGB(i,r,g,b);
-				cindex[i]++;
-				if(cindex[i]>=WS2812ColorCount) cindex[i]=0;
+				if((RGB_Type&0x0F)==0x01){
+					if(cindex[i]>=WS2812ColorCount) cindex[i]=0;
+					uint8_t r=pgm_read_byte(Rcolors+cindex[i]);
+					uint8_t g=pgm_read_byte(Gcolors+cindex[i]);
+					uint8_t b=pgm_read_byte(Bcolors+cindex[i]);
+					WS2812SetRGB(i,r,g,b);
+					cindex[i]++;
+				}
+				else if((RGB_Type&0x0F)==0x00){
+					WS2812SetRGB(i,WS2812fix[i*3],WS2812fix[i*3+1],WS2812fix[i*3+2]);
+				}
 			}
-			}else{
-			WS2812Clear();
+			}else{WS2812Clear();}
+			delayval--;
+			WS2812Send2();
+			}else{if(delayval){delayval--;}else {delayval=Maxdelay;}}
 		}
-		delayval--;
-		WS2812Send2();
-		}else{
-		if(delayval){delayval--;}
-		else {delayval=Maxdelay;}
-	}
-}
 /////////////////////////////////////////////////////////////////////
 
 void BfaceMod(){

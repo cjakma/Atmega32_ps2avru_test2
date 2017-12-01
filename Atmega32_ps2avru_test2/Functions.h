@@ -80,6 +80,7 @@ void LED();
 #define addRGB add5+(ROWS*COLS) //180+75=255
 #define addPrint addRGB+(WS2812_COUNT*3) //255+12*3=291
 uint8_t WS2812fix[(WS2812_COUNT * 3)];
+uint8_t RGB_Type;// bit1-> 0 off 1 on ;bit0-> 0 fix£¬1 Rainbow
 void ResetMatrix(uint8_t mask,uint16_t address);
 void ResetMatrixFormEEP();
 void FaceUMode();
