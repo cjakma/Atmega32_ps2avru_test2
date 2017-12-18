@@ -63,8 +63,7 @@ void Open_LED(){
 		digitalWrite(ledPins[i],HIGH);
 	}
 }
-void Close_LED(){
-
+void Close_LED()
 	for ( i=0; i<ledcount; i++){
 		digitalWrite(ledPins[i],LOW);
 	}
