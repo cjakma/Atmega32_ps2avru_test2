@@ -63,12 +63,11 @@ void Open_LED(){
 		digitalWrite(ledPins[i],HIGH);
 	}
 }
-void Close_LED()
+void Close_LED(){
 	for ( i=0; i<ledcount; i++){
 		digitalWrite(ledPins[i],LOW);
 	}
 }
-
 void init_LED(){
 	for ( i=0; i<ledcount; i++){
 		pinMode(ledPins[i],OUTPUT);
@@ -191,12 +190,12 @@ int init_main(void) {
 	////////////////////////////////////////////////
 	init_cols();
 	init_rows();
-	while (1) {
-		init_LED();
+	while (1) {		
 		keyboard_buffer.enable_pressing=1;
 		releaseAllkeyboardkeys();
 		releaseAllmousekeys();
 		ResetMatrixFormEEP();
+		init_LED();
 		_delay_ms(500);
 		usb_keyboard_send2();
 		while (1) {
