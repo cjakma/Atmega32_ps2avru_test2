@@ -119,7 +119,6 @@ void LED(){
 /////////////////////////////////////////////////////////////////////
 
 void BfaceMod(){
-	FN=0xF0;
 	for (r = 0; r < ROWS; r++) {
 		matrix_set_row_status(r);
 		//_delay_us(5);
@@ -175,6 +174,7 @@ void BfaceMod(){
 			}
 		}
 	}
+	if(!IsBufferClear())FN=0xF0;//Fix FN key state error
 	if(usb_macro_send_required())delay_before=_delay_before;
 	if(usb_keyboard_send_required())delay_before=_delay_before;
 	if(usb_mouse_send_required())delay_before=_delay_before;
@@ -195,6 +195,7 @@ int init_main(void) {
 		releaseAllkeyboardkeys();
 		releaseAllmousekeys();
 		ResetMatrixFormEEP();
+		FN=0xF0;
 		init_LED();
 		_delay_ms(500);
 		usb_keyboard_send2();

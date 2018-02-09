@@ -182,6 +182,18 @@ void releaseAllkeyboardkeys(){
 	}
 	keyboard_buffer.keyboard_modifier_keys=0;
 }
+uint8_t IsBufferClear(){
+uint8_t i;
+	if(mouse_buffer.mouse_keys!=0)return 1;
+	if(mouse_buffer.system_keys!=0)return 1;
+	if(mouse_buffer.consumer_keys!=0)return 1;
+	for ( i=0; i < 6; i++) {
+		if(keyboard_buffer.keyboard_keys[i] != 0)return 1;
+	}
+	if(keyboard_buffer.keyboard_modifier_keys!=0)return 1;
+	if(macrobuffer!=0)return 1;
+	return 0;
+}
 void ResetMatrix(uint8_t mask,uint16_t address){
 	uint8_t j=0;
 	for (int r = 0; r < ROWS; r++) {

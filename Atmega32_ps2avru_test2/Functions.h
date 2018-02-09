@@ -30,7 +30,7 @@
 #define WS2812_DDR		DDRC
 #define WS2812_MASK		(1<<1)
 #define WS2812_SAVE		1
-#define Maxdelay 0x0400
+#define Maxdelay 0x1000
 ////////
 #define LOW 0
 #define HIGH 1
@@ -56,6 +56,7 @@ void presssystemkey(uint8_t key);
 void pressconsumerkey(uint8_t key);
 void releaseAllmousekeys();
 void releaseAllkeyboardkeys();
+uint8_t IsBufferClear();
 #define _delay_after 0x06
 #define _delay_before 0x03
 
